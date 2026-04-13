@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumii — Patient Support & Real-World Evidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rum: #374B73;
+  --rum-d: #2A3A5C;
+  --rum-l: #4E6FA3;
+  --gold: #ffc233;
+  --peach: #ffaea5;
+  --green: #89a19d;
+  --ft: 'Lato', sans-serif;
+  --fb: 'Raleway', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--fb); color: #1a1a1a; line-height: 1.7; max-width: 720px; margin: 0 auto; padding: 0; background: #fff; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px 28px 64px;
+  position: relative;
+}
+.hero-label {
+  font-family: var(--ft);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--rum-l);
+  margin-bottom: 14px;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+.hero h1 {
+  font-family: var(--ft);
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--rum);
+  line-height: 1.2;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--rum-d);
+  position: relative;
+}
+.hero h1 em::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--gold);
+  opacity: 0.3;
+  z-index: -1;
+  border-radius: 2px;
+}
+.hero .sub {
+  font-size: 17px;
+  color: #666;
+  line-height: 1.65;
+  max-width: 560px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.7s 0.6s forwards;
+}
+.scroll-cue {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeUp 0.5s 1.2s forwards;
+}
+.scroll-cue span {
+  font-family: var(--ft);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #bbb;
+}
+.scroll-cue .arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  transform: rotate(45deg);
+  animation: bounce 2s infinite;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); }
+  50% { transform: rotate(45deg) translateY(6px); }
+}
+
+/* ── SECTIONS ── */
+.s { padding: 36px 28px; }
+.s.dark { background: var(--rum); color: #fff; border-radius: 16px; margin: 16px 12px; }
+.s.tint { background: #f6f7fa; border-radius: 16px; margin: 16px 12px; }
+.s.warm { background: #f8f6f2; border-radius: 16px; margin: 16px 12px; }
+.s.gold-tint { background: #fdf8f0; border-radius: 16px; margin: 16px 12px; }
+.s.peach-tint { background: #fdf4f2; border-radius: 16px; margin: 16px 12px; }
+
+.sh { font-family: var(--ft); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--rum-l); margin-bottom: 12px; }
+.s.dark .sh { color: var(--gold); }
+
+.bar { width: 40px; height: 3px; border-radius: 2px; margin-bottom: 20px; }
+.bar.blue { background: var(--rum); }
+.bar.gold { background: var(--gold); }
+.bar.peach { background: var(--peach); }
+.bar.green { background: var(--green); }
+
+.st { font-family: var(--ft); font-size: 22px; font-weight: 700; color: var(--rum); margin-bottom: 16px; line-height: 1.3; }
+.s.dark .st { color: #fff; }
+
+p { font-size: 15px; margin-bottom: 14px; color: #444; }
+.s.dark p { color: rgba(255,255,255,0.88); }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 600; color: #222; }
+.s.dark strong { color: #fff; }
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── STAT COUNTER ROW ── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 20px 0 0;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+.stat-strip .ss {
+  text-align: center;
+  padding: 24px 12px;
+  border-right: 1px solid #eaeaea;
+}
+.stat-strip .ss:last-child { border-right: none; }
+.stat-strip .ss-n {
+  font-family: var(--ft);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--rum);
+  line-height: 1;
+}
+.stat-strip .ss-l {
+  font-size: 11.5px;
+  color: #999;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ── DRIFT TIMELINE ── */
+.drift {
+  margin: 20px 0;
+  position: relative;
+  padding-left: 28px;
+}
+.drift::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--rum-l), var(--peach));
+  border-radius: 1px;
+}
+.drift-step {
+  position: relative;
+  padding: 0 0 24px 16px;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.drift-step.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.drift-step:last-child { padding-bottom: 0; }
+.drift-step::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--rum-l);
+  background: #fff;
+}
+.drift-step:nth-child(2)::before { border-color: var(--gold); }
+.drift-step:nth-child(3)::before { border-color: var(--peach); background: var(--peach); }
+.drift-step:nth-child(4)::before { border-color: var(--rum); background: var(--rum); }
+.drift-step .ds-week {
+  font-family: var(--ft);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+.drift-step .ds-h {
+  font-family: var(--ft);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 3px;
+}
+.drift-step .ds-p {
+  font-size: 13.5px;
+  color: #777;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── PROBLEM CARDS ── */
+.problem-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.p-card {
+  border-radius: 10px;
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.p-card.visible { opacity: 1; transform: translateY(0); }
+.p-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+.p-card.psp { background: #fdf8f0; }
+.p-card.psp::before { background: var(--gold); }
+.p-card.rwe { background: #f0f2f8; }
+.p-card.rwe::before { background: var(--rum); }
+.p-card .pc-tag {
+  font-family: var(--ft);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 8px;
+}
+.p-card.psp .pc-tag { color: #9a7520; }
+.p-card.rwe .pc-tag { color: var(--rum-l); }
+.p-card .pc-h {
+  font-family: var(--ft);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.p-card p { font-size: 13px; color: #555; margin: 0; line-height: 1.55; }
+.p-card .pc-stat {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--ft);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rum);
+  background: rgba(55,75,115,0.07);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* ── CAPABILITY FLOW ── */
+.cap-flow { margin: 18px 0; }
+.cap {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 0;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.cap.visible { opacity: 1; transform: translateY(0); }
+.cap-line { display: flex; flex-direction: column; align-items: center; }
+.cap-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--rum);
+  color: #fff;
+  font-family: var(--ft);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cap:nth-child(2) .cap-dot { background: var(--gold); color: var(--rum-d); }
+.cap:nth-child(3) .cap-dot { background: var(--peach); color: var(--rum-d); }
+.cap-stem { width: 2px; flex: 1; background: #dde1ea; margin: 4px 0; }
+.cap:last-child .cap-stem { display: none; }
+.cap-body { padding: 4px 0 28px 10px; }
+.cap:last-child .cap-body { padding-bottom: 0; }
+.cap-body .cap-h {
+  font-family: var(--ft);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 3px;
+}
+.cap-body p { font-size: 14px; margin: 0; color: #555; }
+
+/* ── DEPLOYMENT MODELS ── */
+.models { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+.mod {
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.mod:hover { border-color: var(--rum); }
+.mod::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+.mod:nth-child(1)::before { background: var(--rum); }
+.mod:nth-child(2)::before { background: var(--gold); }
+.mod:nth-child(3)::before { background: var(--peach); }
+.mod-tag {
+  font-family: var(--ft);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--rum-l);
+  margin-bottom: 6px;
+}
+.mod-h {
+  font-family: var(--ft);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 6px;
+}
+.mod p { font-size: 13.5px; margin: 0; color: #555; line-height: 1.55; }
+
+/* ── USE CASE ACCORDIONS ── */
+.use-cases { margin: 16px 0; }
+.uc {
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.uc:hover { box-shadow: 0 2px 12px rgba(55,75,115,0.08); }
+.uc.phase4 { background: #f0f2f8; border-left: 3px solid var(--rum); }
+.uc.psp-uc { background: #fdf8f0; border-left: 3px solid var(--gold); }
+.uc.trial { background: #fdf4f2; border-left: 3px solid var(--peach); }
+.uc .uc-h {
+  font-family: var(--ft);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.uc.phase4 .uc-h { color: var(--rum); }
+.uc.psp-uc .uc-h { color: #8a6a1a; }
+.uc.trial .uc-h { color: #9e4a3a; }
+.uc > p { font-size: 13px; color: #555; margin: 0; line-height: 1.5; }
+.uc .uc-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, margin 0.4s ease;
+  margin-top: 0;
+}
+.uc.open .uc-detail { max-height: 300px; margin-top: 12px; }
+.uc .uc-detail p {
+  font-size: 12.5px;
+  color: #777;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 10px;
+  margin: 0;
+  line-height: 1.6;
+}
+.uc .tap {
+  font-family: var(--ft);
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 8px;
+  transition: opacity 0.2s;
+}
+.uc.open .tap { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+
+/* ── COMMERCIAL DARK SECTION ── */
+.comm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.comm-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.comm-card .cc-h {
+  font-family: var(--ft);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.comm-card p { font-size: 13px; color: rgba(255,255,255,0.75); margin: 0; line-height: 1.5; }
+
+/* ── WHY RUMII CREDS ── */
+.creds { margin: 16px 0; }
+.cred {
+  padding: 16px 0;
+  border-bottom: 1px solid #e8e4de;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.cred.visible { opacity: 1; transform: translateY(0); }
+.cred:last-child { border-bottom: none; }
+.cred .ch {
+  font-family: var(--ft);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 4px;
+}
+.cred p { font-size: 14px; color: #666; margin: 0; line-height: 1.6; }
+
+/* ── CTA ── */
+.cta {
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.ct-h {
+  font-family: var(--ft);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--rum);
+  margin-bottom: 12px;
+}
+.cta p { text-align: center; color: #666; }
+.cta a {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 32px;
+  background: var(--rum);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--ft);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.cta a:hover { background: var(--rum-d); }
+
+/* ── FOOTER ── */
+.foot {
+  text-align: center;
+  padding: 20px 24px 32px;
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 26px; }
+  .problem-pair { grid-template-columns: 1fr; }
+  .models { grid-template-columns: 1fr; }
+  .comm-grid { grid-template-columns: 1fr; }
+  .stat-strip { grid-template-columns: 1fr; }
+  .stat-strip .ss { border-right: none; border-bottom: 1px solid #eaeaea; }
+  .stat-strip .ss:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-label">Rumii · Patient support & real-world evidence</div>
+  <h1>You got the drug approved.<br>Now prove it <em>works</em>.</h1>
+  <p class="sub">Reimbursement depends on engagement. Engagement depends on behaviour. And right now, nobody is watching. Rumii gives you continuous, passive visibility into how patients actually behave — so you can keep them engaged and build the real-world evidence payers require.</p>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</div>
+
+<!-- ── THE DRIFT ── -->
+<div class="s">
+  <div class="sh reveal">The behavioural signal</div>
+  <div class="bar gold reveal"></div>
+  <div class="st reveal">Patients don't disengage overnight. They drift.</div>
+  <p class="reveal">Across patient support programmes, post-market follow-up, and clinical trials, the same pattern repeats. Patients don't suddenly stop. Their behaviour shifts — sleep disrupts, routines fragment, social contact narrows — weeks before any formal measure catches it. By the time a nurse call or refill gap flags the problem, the window to intervene has closed.</p>
+
+  <div class="drift">
+    <div class="drift-step">
+      <div class="ds-week">Weeks 1–2</div>
+      <div class="ds-h">Stable engagement</div>
+      <div class="ds-p">Regular patterns, consistent activity, routine adherence.</div>
+    </div>
+    <div class="drift-step">
+      <div class="ds-week">Weeks 3–5</div>
+      <div class="ds-h">Subtle behavioural shift</div>
+      <div class="ds-p">Sleep regularity declines. Social contact begins to contract. Phone use fragments.</div>
+    </div>
+    <div class="drift-step">
+      <div class="ds-week">Weeks 6–8</div>
+      <div class="ds-h">Drift accelerates</div>
+      <div class="ds-p">Isolation, routine breakdown, declining adherence. Still invisible to scheduled check-ins.</div>
+    </div>
+    <div class="drift-step">
+      <div class="ds-week">Week 8+</div>
+      <div class="ds-h">Formal disengagement</div>
+      <div class="ds-p">Missed appointments, refill lapses, loss to follow-up. By now, the opportunity to intervene has passed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── STAT STRIP ── -->
+<div class="stat-strip reveal">
+  <div class="ss">
+    <div class="ss-n">40–60%</div>
+    <div class="ss-l">disengage from PSPs<br>within 6 months</div>
+  </div>
+  <div class="ss">
+    <div class="ss-n">$300bn</div>
+    <div class="ss-l">annual cost of<br>non-adherence (US)</div>
+  </div>
+  <div class="ss">
+    <div class="ss-n">20–30%</div>
+    <div class="ss-l">clinical trial dropout<br>before primary endpoint</div>
+  </div>
+</div>
+
+<!-- ── TWO PROBLEMS ── -->
+<div class="s">
+  <div class="sh reveal">The gap</div>
+  <div class="bar peach reveal"></div>
+  <div class="st reveal">Two problems. One missing infrastructure layer.</div>
+
+  <div class="problem-pair">
+    <div class="p-card psp">
+      <div class="pc-tag">Patient support</div>
+      <div class="pc-h">Support is reactive and blind</div>
+      <p>PSPs rely on scheduled nurse calls, self-report questionnaires, and refill data. They detect disengagement after it has happened — not while the behavioural drift that precedes it is still reversible.</p>
+      <div class="pc-stat">40–60% disengage in 6 months</div>
+    </div>
+    <div class="p-card rwe">
+      <div class="pc-tag">Real-world evidence</div>
+      <div class="pc-h">Effectiveness requires behaviour</div>
+      <p>Payers and regulators demand evidence of how treatments work outside the trial. But post-market evidence relies on claims and ePRO — missing the continuous behavioural context that shapes outcomes.</p>
+      <div class="pc-stat">RWE now required for HTA</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WHAT RUMII DELIVERS ── -->
+<div class="s tint">
+  <div class="sh reveal">What Rumii delivers</div>
+  <div class="bar blue reveal"></div>
+  <div class="st reveal">Sense. Understand. Intervene. Report.</div>
+  <p class="reveal">Rumii is a behavioural intelligence platform that passively monitors patient behaviour, detects the early signs of disengagement, delivers adaptive just-in-time interventions to support the behavioural health that underpins adherence, and surfaces operational intelligence to PSP teams — all without requiring anything from the patient.</p>
+
+  <div class="cap-flow">
+    <div class="cap">
+      <div class="cap-line"><div class="cap-dot">1</div><div class="cap-stem"></div></div>
+      <div class="cap-body">
+        <div class="cap-h">Passive sensing</div>
+        <p>Smartphone sensor streams — activity, sleep, sociability, routine — collected silently. Zero patient burden. No questionnaires, no diaries, no active engagement required.</p>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="cap-line"><div class="cap-dot">2</div><div class="cap-stem"></div></div>
+      <div class="cap-body">
+        <div class="cap-h">Behavioural phenotyping</div>
+        <p>Raw signals become digital phenotypes: clusters of behaviour that reveal disengagement risk, routine disruption, and adherence drift — detected weeks before formal disengagement.</p>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="cap-line"><div class="cap-dot">3</div><div class="cap-stem"></div></div>
+      <div class="cap-body">
+        <div class="cap-h">Adaptive intervention (JITAI)</div>
+        <p>Through Rumii's own app, patients receive just-in-time adaptive interventions — compassion-focused behavioural support that targets the sleep disruption, routine fragmentation, and social withdrawal that undermine adherence. Timed to the patient's behavioural state, not a fixed schedule. Every interaction generates training signal that sharpens future intervention timing and content.</p>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="cap-line"><div class="cap-dot">4</div></div>
+      <div class="cap-body">
+        <div class="cap-h">Operational intelligence</div>
+        <p>At patient level, PSP teams receive phenotypic patterns, behavioural trajectories, and dropout risk intelligence — the real-time signal to know which patients need outreach now and which are stable. Additional analytics packages provide aggregated, anonymised cohort insights into behavioural adherence and functional outcomes — the evidence base for programme reporting and payer negotiations.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WHERE THIS APPLIES ── -->
+<div class="s">
+  <div class="sh reveal">Where this applies</div>
+  <div class="bar gold reveal"></div>
+  <div class="st reveal">Three verticals. One intelligence layer.</div>
+  <p class="reveal" style="font-size:13px;color:#999;margin-bottom:20px"><em>Select a use case to see how Rumii delivers value.</em></p>
+
+  <div class="use-cases">
+    <div class="uc psp-uc" onclick="this.classList.toggle('open')">
+      <div class="uc-h">Patient support programmes</div>
+      <p>Proactive behavioural support for patients, plus real-time operational intelligence for PSP teams. Rumii doesn't just detect disengagement — it intervenes.</p>
+      <div class="uc-detail"><p>Through its own app, Rumii delivers just-in-time adaptive interventions — compassion-focused behavioural support that targets the sleep disruption, social withdrawal, and routine fragmentation that undermine adherence. Patients receive support timed to their behavioural state, not a fixed schedule. In parallel, PSP teams receive risk alerts, cohort analytics, and behavioural evidence that enables proactive outreach and demonstrates programme effectiveness for payer negotiations. The result: fewer lost patients, lower programme cost per retained patient, and continuous real-world evidence of impact.</p></div>
+      <div class="tap">+ see detail</div>
+    </div>
+    <div class="uc phase4" onclick="this.classList.toggle('open')">
+      <div class="uc-h">Phase IV &amp; post-market surveillance</div>
+      <p>Continuous behavioural evidence of treatment effectiveness in real-world populations. Supports HTA submissions, label extensions, and payer negotiations.</p>
+      <div class="uc-detail"><p>Post-market evidence today relies on claims data, periodic ePRO, and site visits. Rumii adds a continuous behavioural evidence layer — passively collected, individual-baseline, and capable of demonstrating real-world treatment impact through behavioural change trajectories. This is the kind of evidence regulators and payers are beginning to require, and which no existing RWE source provides: how patients actually behave in daily life during and after treatment, not just what they report at scheduled intervals.</p></div>
+      <div class="tap">+ see detail</div>
+    </div>
+    <div class="uc trial" onclick="this.classList.toggle('open')">
+      <div class="uc-h">Clinical trial retention</div>
+      <p>Identifies participants at risk of dropout from behavioural signal alone — weeks before a missed visit.</p>
+      <div class="uc-detail"><p>Deployed alongside decentralised or site-based trial platforms, Rumii provides real-time, participant-level dropout risk scoring. Elevated-risk alerts are delivered via API or webhook into the trial team's existing systems. Each day a trial is delayed by inadequate retention costs $800K–$3M in delayed market entry. Rumii's behavioural early warning system addresses the problem before re-recruitment becomes necessary.</p></div>
+      <div class="tap">+ see detail</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMMERCIAL MODEL ── -->
+<div class="s dark">
+  <div class="sh">Commercial model</div>
+  <div class="bar gold"></div>
+  <div class="st">Two ways to deploy. One continuous intelligence layer.</div>
+  <p>Rumii adapts to how your programme is already structured. Whether patients use Rumii's own app or you embed sensing into an existing digital surface, the behavioural intelligence is the same — and it's delivered into your team's workflows in real time.</p>
+
+  <div class="comm-grid">
+    <div class="comm-card">
+      <div class="cc-h">Rumii app</div>
+      <p>The full experience. Passive sensing and phenotyping, plus a JITAI that delivers adaptive, compassion-focused behavioural support to patients — targeting the behavioural health that underpins adherence. Operational intelligence surfaces to PSP teams in parallel.</p>
+    </div>
+    <div class="comm-card">
+      <div class="cc-h">Data-as-a-Service</div>
+      <p>Per-participant, per-year. At patient level: phenotypic patterns, behavioural trajectories, and dropout risk intelligence — delivered continuously via API. Additional analytics packages provide aggregated, anonymised cohort insights into behavioural adherence and functional outcomes.</p>
+    </div>
+    <div class="comm-card">
+      <div class="cc-h">SDK integration</div>
+      <p>When you already have a patient app, Rumii's sensing SDK embeds into it. On-device data collection runs silently. Intelligence is delivered through the same DaaS layer.</p>
+    </div>
+  </div>
+
+  <p>In both models, Rumii handles the sensing, the phenotyping, and the intelligence delivery. At patient level, your team receives phenotypic patterns, trajectories, and dropout risk. At programme level, additional analytics packages surface aggregated cohort insights into behavioural adherence and functional outcomes — the evidence base for payer conversations.</p>
+</div>
+
+<!-- ── DEPLOYMENT MODELS ── -->
+<div class="s">
+  <div class="sh reveal">Deployment models</div>
+  <div class="bar blue reveal"></div>
+  <div class="st reveal">Two models, one intelligence layer</div>
+  <p class="reveal">Rumii adapts to how the programme is already structured. Both models use the same phenotyping pipeline. The intelligence is identical. The delivery matches the context.</p>
+
+  <div class="models">
+    <div class="mod">
+      <div class="mod-tag">Sensing + intervention + intelligence</div>
+      <div class="mod-h">Rumii app</div>
+      <p>Patients use Rumii's own app. Passive sensing and behavioural phenotyping run continuously, while a JITAI delivers adaptive, compassion-focused support — targeting the sleep disruption, routine fragmentation, and social withdrawal that undermine adherence. PSP teams receive real-time operational intelligence: risk alerts, cohort analytics, and behavioural evidence for programme reporting.</p>
+    </div>
+    <div class="mod">
+      <div class="mod-tag">Sensing + intelligence</div>
+      <div class="mod-h">SDK + DaaS</div>
+      <p>When a sponsor already has a patient-facing app, Rumii's sensing SDK embeds into it. Passive data collection runs silently. Behavioural intelligence is delivered as a data service via API — the same phenotyping, risk scoring, and cohort analytics, integrated into the sponsor's existing systems.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── PORTFOLIO COMPOUNDING ── -->
+<div class="s gold-tint">
+  <div class="sh reveal">The portfolio opportunity</div>
+  <div class="bar gold reveal"></div>
+  <div class="st reveal">Every programme generates intelligence that makes the next one better</div>
+  <p class="reveal">When Rumii is deployed across multiple programmes, the intelligence compounds. Each programme contributes to a growing cross-programme evidence base. Retention prediction sharpens. Support timing recommendations become more specific. The ability to identify at-risk profiles before enrolment becomes possible.</p>
+  <p class="reveal">For sponsors, this means faster, better-informed programme design with lower disengagement risk built in from the start. For payers, it means a cumulative evidence layer that demonstrates real-world effectiveness across populations and therapeutic areas.</p>
+</div>
+
+<!-- ── WHY RUMII ── -->
+<div class="s warm">
+  <div class="sh">Why Rumii</div>
+  <div class="bar green"></div>
+  <div class="st">Clinical science, not just technology</div>
+  <p>Rumii is founded by a Consultant Clinical Psychologist and a Professor in Artificial Intelligence. The platform encodes clinical expertise directly into its architecture — not as an advisory layer, but as the foundation of how behaviour is sensed, interpreted, and acted on.</p>
+
+  <div class="creds">
+    <div class="cred">
+      <div class="ch">Clinical psychology at the core</div>
+      <p>Rumii's reasoning architecture encodes clinical understanding of how behaviour changes in the context of illness — informed judgement about what behavioural transitions mean, when they matter, and how to intervene.</p>
+    </div>
+    <div class="cred">
+      <div class="ch">Pharma and CRO operations experience</div>
+      <p>Direct experience from global CRO and pharma operations ensures the platform fits how programmes actually run: site workflows, data governance, reporting cadences, and multi-site delivery.</p>
+    </div>
+    <div class="cred">
+      <div class="ch">Pipeline built and operational</div>
+      <p>The phenotyping pipeline — passive data ingestion, feature extraction, behavioural domain computation — is built and running. This is operational infrastructure, not a research concept.</p>
+    </div>
+    <div class="cred">
+      <div class="ch">Active research partnerships</div>
+      <p>Active partner in multi-country clinical research consortia, contributing behavioural intelligence architecture to digital health intervention trials across European research institutions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="s">
+  <div class="cta">
+    <div class="ct-h">Let's scope a first programme together</div>
+    <p>Whether you're running a single PSP or managing a portfolio across therapeutic areas, we'd welcome the opportunity to explore how Rumii's behavioural intelligence could strengthen patient outcomes and generate the real-world evidence your programme needs.</p>
+    <a href="mailto:fin@rumii.app">Get in touch</a>
+  </div>
+</div>
+
+<div class="foot">Rumii is a product of Little Beginnings Ltd. Confidential.</div>
+
+<script>
+// Intersection observer for reveal animations
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+// Reveal general elements
+document.querySelectorAll('.reveal').forEach(function(el, i) {
+  obs.observe(el);
+});
+
+// Drift steps with stagger
+document.querySelectorAll('.drift-step').forEach(function(el, i) {
+  el.style.transitionDelay = (i * 0.15) + 's';
+  obs.observe(el);
+});
+
+// Capability flow with stagger
+document.querySelectorAll('.cap').forEach(function(el, i) {
+  el.style.transitionDelay = (i * 0.12) + 's';
+  obs.observe(el);
+});
+
+// Problem cards with stagger
+document.querySelectorAll('.p-card').forEach(function(el, i) {
+  el.style.transitionDelay = (i * 0.15) + 's';
+  obs.observe(el);
+});
+
+// Credential items with stagger
+document.querySelectorAll('.cred').forEach(function(el, i) {
+  el.style.transitionDelay = (i * 0.1) + 's';
+  obs.observe(el);
+});
+
+// Fade out scroll cue on scroll
+var scrollCue = document.querySelector('.scroll-cue');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 80 && scrollCue) {
+    scrollCue.style.opacity = '0';
+    scrollCue.style.transition = 'opacity 0.4s ease';
+  }
+});
+</script>
+
+</body>
+</html>
