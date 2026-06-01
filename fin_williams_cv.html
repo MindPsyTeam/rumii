@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr Fin Williams — Founder & CEO, Rumii</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #374B73;
+    --navy-deep: #1e2d4a;
+    --gold: #FFC233;
+    --peach: #FFAEA5;
+    --green: #89A19D;
+    --cream: #FAF8F5;
+    --warm-white: #FFFDF9;
+    --text: #2a2a2a;
+    --text-light: #6b6b6b;
+    --border: #e8e4de;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--navy-deep);
+    color: white;
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,194,51,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(137,161,157,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero-credentials {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-statement {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+    max-width: 720px;
+    font-style: italic;
+  }
+
+  .hero-statement strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ─── SIGNAL BAR ─── */
+  .signal-bar {
+    background: var(--navy);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .signal-item {
+    flex: 1 1 200px;
+    padding: 28px 32px;
+    text-align: center;
+    color: white;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.3s;
+  }
+
+  .signal-item:hover {
+    background: rgba(255,194,51,0.06);
+  }
+
+  .signal-item:last-child { border-right: none; }
+
+  .signal-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .signal-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ─── THESIS SECTION ─── */
+  .thesis {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .thesis h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin-bottom: 20px;
+    line-height: 1.25;
+  }
+
+  .thesis p {
+    font-size: 15.5px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .thesis p:last-child { margin-bottom: 0; }
+
+  .highlight-line {
+    display: inline;
+    background: linear-gradient(to top, rgba(255,194,51,0.2) 0%, rgba(255,194,51,0.2) 40%, transparent 40%);
+  }
+
+  /* ─── TABS NAVIGATION ─── */
+  .tabs-section {
+    padding: 64px 0 0;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    padding: 16px 28px;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .tab-btn:hover { color: var(--navy); }
+
+  .tab-btn.active {
+    color: var(--navy-deep);
+    font-weight: 700;
+  }
+
+  .tab-btn.active::after {
+    transform: scaleX(1);
+  }
+
+  .tab-panel {
+    display: none;
+    padding: 40px 0 64px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .tab-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── RUMII / FOUNDER PANEL ─── */
+  .founder-chapter {
+    margin-bottom: 48px;
+  }
+
+  .founder-chapter h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin-bottom: 8px;
+  }
+
+  .founder-chapter .role-date {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .founder-chapter p {
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .pillar-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .pillar-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(55,75,115,0.06);
+  }
+
+  .pillar-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .pillar-card p {
+    font-size: 13.5px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* ─── OPERATOR EXPERIENCE ─── */
+  .operator-entry {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .operator-entry:last-child { border-bottom: none; }
+
+  .operator-entry h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--navy-deep);
+    margin-bottom: 4px;
+  }
+
+  .operator-entry .org-date {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+
+  .operator-entry p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .impact-tag {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-right: 6px;
+    margin-top: 8px;
+  }
+
+  .impact-tag.build { background: rgba(255,194,51,0.15); color: #9a7100; }
+  .impact-tag.scale { background: rgba(137,161,157,0.2); color: #4a6b66; }
+  .impact-tag.transform { background: rgba(255,174,165,0.25); color: #a0524a; }
+
+  /* ─── EXPANDABLE SECTIONS ─── */
+  .expandable {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: var(--warm-white);
+    transition: border-color 0.3s;
+  }
+
+  .expandable:hover { border-color: #ccc; }
+
+  .expandable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .expandable-header:hover { background: rgba(137,161,157,0.04); }
+
+  .expandable-header h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .expandable-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--text-light);
+    transition: transform 0.3s, border-color 0.3s, background 0.3s;
+    flex-shrink: 0;
+  }
+
+  .expandable.open .expandable-toggle {
+    transform: rotate(45deg);
+    border-color: var(--gold);
+    background: rgba(255,194,51,0.08);
+    color: var(--navy);
+  }
+
+  .expandable-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+
+  .expandable.open .expandable-body {
+    max-height: 2000px;
+    padding: 0 24px 24px;
+  }
+
+  .expandable-body p, .expandable-body li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .expandable-body ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .expandable-body li {
+    padding: 6px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .expandable-body li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .qual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .qual-item {
+    padding: 16px;
+    background: var(--cream);
+    border-radius: 6px;
+  }
+
+  .qual-item .qual-degree {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--navy-deep);
+    margin-bottom: 2px;
+  }
+
+  .qual-item .qual-institution {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .qual-item .qual-note {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--navy-deep);
+    color: rgba(255,255,255,0.5);
+    padding: 40px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .footer a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .hero { padding: 60px 24px 48px; }
+    .content { padding: 0 24px; }
+    .signal-item { padding: 20px 16px; }
+    .pillar-grid { grid-template-columns: 1fr; }
+    .qual-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 14px 18px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Founder & CEO — Rumii</div>
+    <h1>Dr Fin Williams</h1>
+    <div class="hero-credentials">BSc (1st) · MSc (Dist.) · D.Clin.Psy · CPsychol · HCPC Registered</div>
+    <p class="hero-statement">
+      Clinical psychologist turned deep-tech founder, building the <strong>first real-world model of human behavioural health under intervention</strong> — a closed-loop system that senses, phenotypes, and adaptively intervenes through the layer of human behaviour that drives 60–80% of treatment outcomes.
+    </p>
+  </div>
+</header>
+
+<!-- ════════════════ SIGNAL BAR ════════════════ -->
+<div class="signal-bar">
+  <div class="signal-item">
+    <div class="signal-number">20</div>
+    <div class="signal-label">Years in Clinical Practice</div>
+  </div>
+  <div class="signal-item">
+    <div class="signal-number">4</div>
+    <div class="signal-label">Proprietary Tech Layers</div>
+  </div>
+  <div class="signal-item">
+    <div class="signal-number">£589K</div>
+    <div class="signal-label">Raised to Date</div>
+  </div>
+  <div class="signal-item">
+    <div class="signal-number">€7M</div>
+    <div class="signal-label">Horizon Europe Consortium</div>
+  </div>
+</div>
+
+<!-- ════════════════ CONTENT ════════════════ -->
+<div class="content">
+
+  <!-- THESIS -->
+  <section class="thesis">
+    <div class="section-label">The Thesis</div>
+    <h2>Behaviour is biology's missing variable</h2>
+    <p>
+      Genomics, proteomics, metabolomics — the omics revolution maps the machinery of disease. But the single largest predictor of health outcomes isn't in the genome. It's in how we sleep, move, connect, and cope. <span class="highlight-line">Behaviour drives 60–80% of treatment outcomes through the psychoneuroimmunological cascade</span> — and until now, no one has modelled it continuously, in vivo, under intervention.
+    </p>
+    <p>
+      Rumii introduces the <strong>Vivome</strong>™ — the fifth -ome — a continuous behavioural measurement layer captured through passive smartphone sensing. Four proprietary layers (battery-preserving sensing → behavioural models for sleep, sociability, presence, and habits → digital phenotyping → a clinical reasoning agent generating state-action-response triplets) create a defensible moat that observation-only platforms cannot replicate. The intervention loop generates the causal structure. Without it, you have correlation. With it, you have a world model.
+    </p>
+  </section>
+
+  <!-- ════════════════ TABBED PANELS ════════════════ -->
+  <section class="tabs-section">
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" role="tab" data-tab="founder" aria-selected="true">Rumii</button>
+      <button class="tab-btn" role="tab" data-tab="operator">Operator Track Record</button>
+      <button class="tab-btn" role="tab" data-tab="qualifications">Qualifications</button>
+      <button class="tab-btn" role="tab" data-tab="research">Research & Speaking</button>
+    </nav>
+
+    <!-- ──── TAB: RUMII ──── -->
+    <div class="tab-panel active" id="tab-founder" role="tabpanel">
+      <div class="founder-chapter">
+        <h3>Rumii (Little Beginnings Ltd)</h3>
+        <div class="role-date">Founder & CEO · 2024 – present · Oxford, UK</div>
+        <p>
+          Rumii is a deep-tech behavioural health company building the first real-world model of behavioural health under intervention. The core product is a closed-loop sensing-phenotyping-agentic-intervention system — the Vivome — deployed as a B2B SDK and Data-as-a-Service platform for pharma, clinical trials, and health systems.
+        </p>
+        <p>
+          I conceived the scientific thesis (behaviour as the missing variable in precision medicine via the PNI cascade), designed the clinical architecture end-to-end, and recruited a founding team that includes an Oxford PhD CAIO (former IQVIA), a four-time exited deep-tech CTO, and a CCO with commercial scale-up experience. I am the sole clinical author of the JITAI (Just-In-Time Adaptive Intervention) policy — a three-layer architecture covering trend-based, acute-state, and safety-override interventions grounded in compassion-focused behavioural activation.
+        </p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Sensing Layer</h4>
+            <p>Battery-preserving passive smartphone sensing capturing sleep, activity, sociability, and environmental presence — signal-layer models Apple cannot replicate without an intervention loop.</p>
+          </div>
+          <div class="pillar-card">
+            <h4>Phenotyping Engine</h4>
+            <p>Digital Phenotype Architecture v4: raw signals → derived features → pattern clusters → phenotypes → risk tiering, all relative to rolling 14-day personalised baselines.</p>
+          </div>
+          <div class="pillar-card">
+            <h4>Clinical Reasoning Agent</h4>
+            <p>GPT-4.1 (UK South, data-resident) generating state-action-response triplets. Attachment-aware, readiness-modulated, with CFT stage architecture and safety override matrix.</p>
+          </div>
+          <div class="pillar-card">
+            <h4>World Model</h4>
+            <p>Every intervention episode persisted as a research-grade observation from day one — building the causal dataset for a simulation API that enables counterfactual reasoning at scale.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="founder-chapter" style="margin-top: 40px;">
+        <h3>Fundraising & Partnerships</h3>
+        <div class="role-date">Seed stage · 2025–2026</div>
+        <p>
+          £589K raised to date: £269K Innovate UK grant, £135K angel investment, and a £185K first close on a £600K seed bridge anchored by a strategic angel with global pharma background. Currently in due diligence with a deep-tech fund. Building toward a US Series A.
+        </p>
+        <p>
+          Co-investigator on a €7M Horizon Europe consortium (DIGIWELL-YOUTH, ages 10–24, three-arm RCT across five countries). Innovate UK Frontier AI bid submitted for feasibility of a behavioural dynamics foundation model. Commercial pipeline includes pharma PSP/RWE partnerships and NHS pathway integration.
+        </p>
+      </div>
+    </div>
+
+    <!-- ──── TAB: OPERATOR ──── -->
+    <div class="tab-panel" id="tab-operator" role="tabpanel">
+      <p style="font-size: 15px; color: var(--text-light); margin-bottom: 32px; line-height: 1.7;">
+        Before founding Rumii, I spent over twenty years inside the NHS — building clinics, workforces, training programmes, and digital services — each time from scratch, each time with constrained resources and complex stakeholder maps. This is the operator track record behind the founder.
+      </p>
+
+      <div class="operator-entry">
+        <h3>Built a Research-Led Children's Mental Health Clinic</h3>
+        <div class="org-date">CYP-AccEPT · University of Oxford/Exeter · 2017–2022</div>
+        <p>
+          Designed and launched a children's early intervention wellbeing service from inception — workforce of nine practitioners delivering low-intensity CBT for ages 5–18. Built every operational system: referral pathways, governance, outcomes tracking, quarterly commissioner reporting. Served 250+ young people with zero waiting list and four-week access. Secured NHS commissioning through service evaluation data. Concurrently created the low-intensity parenting programme now in use across the South West.
+        </p>
+        <span class="impact-tag build">Built from zero</span>
+        <span class="impact-tag scale">250+ served, no waitlist</span>
+        <span class="impact-tag transform">Secured commissioning</span>
+      </div>
+
+      <div class="operator-entry">
+        <h3>Scaled a National Workforce Development Programme</h3>
+        <div class="org-date">CYP IAPT · University of Exeter · 2015–2021</div>
+        <p>
+          Programme Lead for the national CYP IAPT Wellbeing Practitioner and Education Mental Health Practitioner supervisor training — a PGCert programme I created from curriculum design through assessment, delivery, and external examination. Managed the South West collaborative of statutory and non-statutory services, transforming engagement, data collection, and commissioning relationships. Designed kitemark and quality mechanisms that incentivised service transformation across the region.
+        </p>
+        <span class="impact-tag build">Curricula created end-to-end</span>
+        <span class="impact-tag scale">Regional workforce scale</span>
+        <span class="impact-tag transform">National policy input</span>
+      </div>
+
+      <div class="operator-entry">
+        <h3>Led Digital Transformation of Clinical Training</h3>
+        <div class="org-date">Oxford Institute of Clinical Psychology Training & Research · 2020–2022</div>
+        <p>
+          Managed the expansion of the Oxford D.Clin.Psy programme from 17 to 45 trainees per cohort — redesigning placement models, personal tutoring, and wellbeing support systems to absorb a 165% increase in scale. Introduced compassion-focused practice into the curriculum, built communities of practice for clinical supervisors, and created innovative online teaching structures including live problem-based case consultations with clinicians nationwide. Directly line-managed seven trainees and eighteen major research projects.
+        </p>
+        <span class="impact-tag scale">165% cohort growth</span>
+        <span class="impact-tag transform">Digital-first pedagogy</span>
+        <span class="impact-tag build">New support systems</span>
+      </div>
+
+      <div class="operator-entry">
+        <h3>Developed Paediatric Chronic Pain & Fatigue Service</h3>
+        <div class="org-date">South Devon Healthcare NHS Trust · 2009–2014</div>
+        <p>
+          Identified a gap in paediatric provision and built a multi-disciplinary chronic pain and fatigue service from scratch — working across physiotherapy, paediatrics, and CAMHS. Piloted early-intervention school training for detection and referral. Early adopter of "Patient Knows Best" — a digital platform enabling young people and families to co-manage care decisions. Both initiatives reduced time out of school and prevented condition escalation.
+        </p>
+        <span class="impact-tag build">Service built from gap analysis</span>
+        <span class="impact-tag transform">Early digital health adoption</span>
+      </div>
+
+      <div class="operator-entry">
+        <h3>COVID-19 Rapid Service Redesign</h3>
+        <div class="org-date">Sirona Lifetime Service · 2020</div>
+        <p>
+          As Head of Psychology for a palliative care service, redesigned the entire provision for remote delivery within weeks — creating tiered support (self-help, guided self-help, individual sessions) based on need and risk. Freed capacity to launch a staff support phone line for frontline workers. Co-designed a cross-organisational model with Bristol Children's Hospital and Bristol Royal Infirmary for acute hospital staff support during the first wave.
+        </p>
+        <span class="impact-tag transform">Rapid redesign under pressure</span>
+        <span class="impact-tag build">Staff support infrastructure</span>
+      </div>
+    </div>
+
+    <!-- ──── TAB: QUALIFICATIONS ──── -->
+    <div class="tab-panel" id="tab-qualifications" role="tabpanel">
+
+      <div class="expandable open">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Academic Qualifications</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <div class="qual-grid">
+            <div class="qual-item">
+              <div class="qual-degree">D.Clin.Psy</div>
+              <div class="qual-institution">University of Plymouth, 2004–2007</div>
+              <div class="qual-note">Doctoral Clinical Psychology</div>
+            </div>
+            <div class="qual-item">
+              <div class="qual-degree">MSc Clinical Psychology</div>
+              <div class="qual-institution">University of Wales, Bangor, 2003</div>
+              <div class="qual-note">Distinction</div>
+            </div>
+            <div class="qual-item">
+              <div class="qual-degree">BSc Psychology with Health Psychology</div>
+              <div class="qual-institution">University of Wales, Bangor, 2001</div>
+              <div class="qual-note">First Class Honours</div>
+            </div>
+            <div class="qual-item">
+              <div class="qual-degree">Foundation in Family Therapy</div>
+              <div class="qual-institution">Completed during doctoral training</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="expandable">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Professional Registration & Memberships</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li>HCPC Registered Clinical Psychologist — PYL24872</li>
+            <li>Chartered Psychologist (CPsychol), British Psychological Society — 179438</li>
+            <li>British Association for Behavioural & Cognitive Psychotherapies — 00001005788</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="expandable">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Specialist Clinical Training</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li>CARE-INDEX — assessment of infant attachment</li>
+            <li>Story Stem Assessment — child attachment narratives</li>
+            <li>Dynamic Maturational Model of attachment</li>
+            <li>Child Protection Level 3 — Domestic Violence</li>
+            <li>Child Protection Level 3 — Parental Mental Health</li>
+            <li>Trained in CBT, CAT, Family Therapy, Narrative Therapy, IPT, Behavioural Interventions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="expandable">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>External Examining & Governance</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li>External Examiner — CYP IAPT PGDip Parenting, King's College London / UCL, 2018–2021</li>
+            <li>Shortlisting panel — D.Clin.Psy prospective trainees, Plymouth University</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── TAB: RESEARCH ──── -->
+    <div class="tab-panel" id="tab-research" role="tabpanel">
+
+      <div class="expandable open">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Doctoral & Postgraduate Research</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li><strong>D.Clin.Psy (Plymouth):</strong> <em>Personal Myth and the Transition to Parenthood</em> — mixed-methods design using Repertory Grid and life-story interviews, finding that narrative coherence and tone predicted emotional adjustment to parenthood, mapping onto attachment research.</li>
+            <li><strong>MSc (Bangor):</strong> <em>Incredible Years Programme with Foster Carers of Looked After Children — The Effects of Insularity</em> — longitudinal case study using Wahler's Insularity Scale, demonstrating direct relationship between social support, parenting positivity, and child behaviour outcomes.</li>
+            <li><strong>BSc (Bangor):</strong> <em>Imitation and Matching Behaviours in Infant Language Development</em> — contributed to a wider PhD programme on language acquisition in 18-month to 3-year-olds.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="expandable">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Active Research & Grant Applications</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li><strong>DIGIWELL-YOUTH (Horizon Europe, €7M):</strong> Co-investigator and WP4 Lead on a 36-month, five-country consortium delivering JITAI-based compassion-focused behavioural activation for ages 10–24. Three-arm RCT design powered at d=0.50.</li>
+            <li><strong>Innovate UK Frontier AI (Competition 2419):</strong> Feasibility study for a foundation model trained on passive smartphone sensor data to predict health-relevant behavioural trajectories and simulate intervention responses. TRL 1–2.</li>
+            <li><strong>Low-Intensity Parenting Programme:</strong> Case series evaluation (in progress) of the parenting programme I designed, delivered across the South West by CWP and EMHP practitioners — contributing to the evidence base for low-intensity parenting support.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="expandable">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <h4>Speaking & Public Engagement</h4>
+          <div class="expandable-toggle">+</div>
+        </div>
+        <div class="expandable-body">
+          <ul>
+            <li><strong>TEDxExeter (2014):</strong> Invited talk on how personal narratives shape our experience of life transitions — connecting attachment theory and storytelling to the transition to parenthood.</li>
+            <li><strong>UKRI Mental Health Platform Hub:</strong> Presented "Rumii's Guest House" — the Vivome concept using Rumi's <em>The Guest House</em> as structural metaphor for behavioural sensing.</li>
+            <li><strong>Tech Tour Pitch (2026):</strong> Selected presenter — Rumii's Vivome and closed-loop intervention system.</li>
+            <li><strong>Founder, Parent Perspectives (2014–2015):</strong> Biopsychosocial antenatal education programme — workshops and online materials supporting the emotional and relational transition to parenthood.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="footer">
+  <div class="footer-name">Dr Fin Williams</div>
+  <p><a href="mailto:Drfinwilliams@gmail.com">Drfinwilliams@gmail.com</a> · Oxford, UK · <a href="https://rumii.app">rumii.app</a></p>
+  <p style="margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.3);">Vivome™ is a trademark of Little Beginnings Ltd</p>
+</footer>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Expandable sections
+  function toggleExpand(header) {
+    const expandable = header.parentElement;
+    expandable.classList.toggle('open');
+  }
+
+  // Staggered entrance animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = (i * 0.08) + 's';
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.operator-entry, .pillar-card, .expandable').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  // Add visible class styles
+  const style = document.createElement('style');
+  style.textContent = '.visible { opacity: 1 !important; transform: translateY(0) !important; }';
+  document.head.appendChild(style);
+</script>
+</body>
+</html>
