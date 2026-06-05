@@ -523,6 +523,13 @@ h2{font-size:clamp(2.3rem,5.6vw,4.6rem);margin-bottom:30px}
 .bridge-text{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap}
 .ms.bridge-ms{color:var(--mist-dim);font-style:italic;letter-spacing:.04em;text-transform:none;font-size:10px;font-weight:600}
 @media(max-width:760px){.minichart .bars{height:180px}.bridge-text{font-size:8px;letter-spacing:.16em}}
+.megacap{font-family:var(--serif);font-style:italic;font-size:clamp(1.05rem,1.5vw,1.25rem);color:var(--mist);text-align:center;max-width:640px;margin:12px auto 0;line-height:1.4;letter-spacing:.01em}
+/* === cost strip (clinical trials cost) === */
+.cost-strip{display:flex;gap:28px;justify-content:center;align-items:stretch;margin:34px 0 48px;flex-wrap:wrap;max-width:880px}
+.cs{flex:1;min-width:260px;max-width:400px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:14px;padding:24px 30px;background:rgba(255,255,255,.012)}
+.cs-n{font-family:var(--serif);font-weight:900;font-size:clamp(1.5rem,3.2vw,2.3rem);color:var(--gold);line-height:1;margin-bottom:10px;letter-spacing:-.01em}
+.cs-l{font-size:.92rem;color:var(--mist);line-height:1.4}
+@media(max-width:640px){.cost-strip{gap:16px;margin:24px 0 36px}.cs{padding:20px 22px;min-width:auto}}
 </style>
 </head>
 <body>
@@ -549,59 +556,41 @@ h2{font-size:clamp(2.3rem,5.6vw,4.6rem);margin-bottom:30px}
   <div class="scrollcue"><span class="bar"></span>Scroll to explore</div>
 </section>
 
-<!-- ============ THE BLIND SPOT ============ -->
-<section id="gap" data-label="The Blind Spot">
-  <div class="eyebrow reveal">The Blind Spot</div>
-  <h2 class="reveal d1">Care sees the crash.<br><span class="accent-p">Not the slide.</span></h2>
-  <p class="lede reveal d2">A generation ago, a family doctor held continuity in their head — the household, the routines, what was unusual. Continuity has collapsed. Today, healthcare meets you for ten minutes, with no memory of the months in between. Risk only becomes visible once a person has already disengaged.</p>
-
-  <div class="thennow reveal d3">
-    <div class="col">
-      <span class="tn-tag">Then · c.1995</span>
-      <h3>She knew the family.</h3>
-      <p>Pattern recognition was the job. The data was a person who knew you.</p>
-    </div>
-    <div class="col">
-      <span class="tn-tag now">Now · 2026</span>
-      <h3>Ten minutes. No history.</h3>
-      <p>Caseloads at record highs. The earliest signals fade fastest — because no one is close enough to see them.</p>
-    </div>
-  </div>
-
-  <div class="statstrip reveal d4">
-    <div class="st"><div class="big" data-count="500" data-prefix="$" data-suffix="bn">$0</div><div class="lab">Lost annually to dropout &amp; disengagement — across trials, adherence, mental health, post-acute care.</div></div>
-    <div class="st"><div class="big">Episodic</div><div class="lab">Behaviour is measured today only by self-report — sporadic, unreliable, and gone by the time it matters.</div></div>
-    <div class="st"><div class="big">In the gap</div><div class="lab">Drift happens between contacts. The signal is real — the infrastructure to detect it is not.</div></div>
-  </div>
-</section>
-
-<!-- ============ 60-80 ============ -->
-<section id="behaviour" data-label="60–80%">
-  <div class="eyebrow reveal">Behaviour Drives Outcomes</div>
-  <h2 class="reveal d1" style="margin-bottom:8px">Of every health outcome,<br>this much is <span class="accent">behaviour</span>:</h2>
+<!-- ============ THE MISSING LAYER ============ -->
+<section id="behaviour" data-label="The Missing Layer">
+  <div class="eyebrow reveal">The missing layer of proactive, personalised health</div>
+  <h2 class="reveal d1" style="margin-bottom:8px">AI is rewriting medicine.<br>One layer remains unread.</h2>
   <div class="megastat reveal d2">60–80<span class="pct">%</span></div>
-  <p class="lede reveal d3" style="margin-top:30px">How we sleep, move, connect and keep routine governs the majority of long-term outcomes — most starkly in mental and inflammatory health, where the earliest signals fade fastest. It is the single largest lever in medicine, and the only one left unmeasured.</p>
+  <div class="megacap reveal d2"><em>of treatment outcomes are due to human behaviour.</em></div>
+  <p class="lede reveal d3" style="margin-top:26px;max-width:820px">How we sleep, move, connect and keep routine governs the majority of long-term outcomes — yet remains the only layer of healthcare still measured by asking. Sporadic. Self-reported. Out of date by the time it is read.</p>
   <div class="drivers reveal d4">
     <div class="dr"><div class="n">01 · Driver</div><div class="t">Help-seeking</div></div>
-    <div class="dr"><div class="n">02 · Driver</div><div class="t">Adherence</div></div>
-    <div class="dr"><div class="n">03 · Driver</div><div class="t">Retention</div></div>
+    <div class="dr"><div class="n">02 · Driver</div><div class="t">Retention</div></div>
+    <div class="dr"><div class="n">03 · Driver</div><div class="t">Adherence</div></div>
     <div class="dr"><div class="n">04 · Driver</div><div class="t">Lifestyle</div></div>
   </div>
 </section>
 
-<!-- ============ DRIFT ============ -->
-<section id="drift" data-label="Detectable">
-  <div class="eyebrow reveal">The Drift Pattern</div>
-  <h2 class="reveal d1">Disengagement is gradual,<br>behavioural, and <span class="accent">detectable</span>.</h2>
-  <p class="lede reveal d2">Four behavioural stages, weeks apart. Sleep fragments, social contact thins, routine breaks down — long before a missed appointment or a dropout. The signal is there.</p>
+<!-- ============ WHAT IT COSTS ============ -->
+<section id="drift" data-label="The Cost">
+  <div class="eyebrow reveal">What it costs</div>
+  <h2 class="reveal d1">Behavioural drift slows<br>therapies <span class="accent">reaching patients</span>.</h2>
+  <p class="lede reveal d2">The clearest example is in clinical trials. Trials demand a lot — repeated visits, rigid schedules, sustained for months alongside the rest of a person's life. The strain builds between visits, invisible to the trial team. Patients leave not because they stop caring, but because the cost of staying becomes too high. The signal is there. It isn't read.</p>
+
+  <div class="cost-strip reveal d3">
+    <div class="cs"><div class="cs-n">£800k–£3M</div><div class="cs-l">per day each trial slips</div></div>
+    <div class="cs"><div class="cs-n">Months</div><div class="cs-l">therapies delayed for patients waiting</div></div>
+  </div>
+
   <div class="driftbar" id="driftbar"></div>
   <div class="driftgrid">
-    <div class="driftcard reveal d2"><div class="dc-wk"><span class="dt"></span>Weeks 1–2</div><div class="dc-h">Stable engagement</div><div class="dc-p">Regular patterns, consistent activity, predictable contact.</div></div>
-    <div class="driftcard reveal d3"><div class="dc-wk"><span class="dt"></span>Weeks 3–5</div><div class="dc-h">Subtle behavioural shift</div><div class="dc-p">Sleep disruption, fewer social contacts, more phone pickups.</div></div>
-    <div class="driftcard reveal d4"><div class="dc-wk"><span class="dt"></span>Weeks 6–8</div><div class="dc-h">Drift accelerates</div><div class="dc-p">Isolation, routine breakdown, declining adherence.</div></div>
-    <div class="driftcard crisis reveal d5"><div class="dc-wk"><span class="dt"></span>Week 8+</div><div class="dc-h">Formal disengagement</div><div class="dc-p">Dropout, missed appointments, loss to follow-up.</div></div>
+    <div class="driftcard reveal d2"><div class="dc-wk"><span class="dt"></span>Weeks 1–2</div><div class="dc-h">Stable</div><div class="dc-p">Patterns hold.</div></div>
+    <div class="driftcard reveal d3"><div class="dc-wk"><span class="dt"></span>Weeks 3–5</div><div class="dc-h">Subtle shift</div><div class="dc-p">Sleep, contact, device use change. Invisible to the protocol.</div></div>
+    <div class="driftcard reveal d4"><div class="dc-wk"><span class="dt"></span>Weeks 6–8</div><div class="dc-h">Drift accelerates</div><div class="dc-p">Routine breaks. Adherence falls. Still no formal signal.</div></div>
+    <div class="driftcard crisis reveal d5"><div class="dc-wk"><span class="dt"></span>Week 8+</div><div class="dc-h">Lost to follow-up</div><div class="dc-p">The trial slips. The therapy waits.</div></div>
   </div>
-  <p class="driftclose reveal d5">The signal is there. <span class="accent">The infrastructure to detect and act on it is not.</span> That is what Rumii builds.</p>
+  <p class="driftclose reveal d5">The signal is continuous. <span class="accent">The infrastructure to read it is not.</span></p>
+  <p class="reveal d5" style="text-align:center;font-style:italic;font-size:.98rem;color:var(--mist);max-width:720px;margin:18px auto 0;line-height:1.55">When the signal is read, trial teams see <span class="accent">who needs more support</span> — while participants get <span class="accent">adaptive interventions</span> for the strain between visits.</p>
 </section>
 
 <!-- ============ WHY NOW ============ -->
@@ -668,6 +657,7 @@ h2{font-size:clamp(2.3rem,5.6vw,4.6rem);margin-bottom:30px}
     <div class="loopnode reveal d4"><div class="ring"><b>03</b></div><div class="step">Act · JITAI</div><div class="h">Reasoning Agent</div><div class="p">A just-in-time adaptive intervention — tone, timing and aim calibrated to the moment, and to the person, not the average.</div></div>
     <div class="loopnode reveal d5"><div class="ring"><b>04</b></div><div class="step">Change</div><div class="h">Trajectory</div><div class="p">Earlier intervention. Fewer crises. Better long-term outcomes.</div></div>
   </div>
+  <p class="reveal d5" style="text-align:center;font-style:italic;font-size:.98rem;color:var(--mist);max-width:720px;margin:36px auto 0;line-height:1.55">Beneath the intelligence sits the asset itself: <span class="accent">the first continuous behavioural model of human health</span>.</p>
 </section>
 
 <!-- ============ THE ASSET ============ -->
