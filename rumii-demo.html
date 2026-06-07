@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rumii Platform Demo</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:1280px; height:720px; overflow:hidden;
+  background:#030308;
+  font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── SCENE SYSTEM ─────────────────────────────────────── */
+.scene {
+  position:absolute; top:0; left:0; width:1280px; height:720px;
+  opacity:0; transition:opacity 1s ease; pointer-events:none; overflow:hidden;
+}
+.scene.active { opacity:1; pointer-events:auto; }
+
+.scene-badge {
+  position:absolute; top:26px; left:36px; z-index:100;
+  display:flex; align-items:center; gap:10px;
+  opacity:0; transform:translateY(-6px);
+  transition:opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s;
+}
+.scene.active .scene-badge { opacity:1; transform:translateY(0); }
+.badge-num {
+  width:26px; height:26px; border-radius:50%;
+  background:rgba(255,194,51,0.12); border:0.5px solid rgba(255,194,51,0.35);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:600; color:#FFC233;
+}
+.badge-title { font-size:12px; color:rgba(255,255,255,0.45); }
+.badge-sub { font-size:10px; color:rgba(255,255,255,0.22); margin-top:1px; }
+
+#wordmark {
+  position:fixed; top:26px; right:36px; z-index:999;
+  font-size:14px; font-weight:700; color:rgba(255,255,255,0.25);
+  letter-spacing:0.14em;
+}
+
+/* shared chips */
+.chip {
+  display:inline-block; padding:2px 9px; border-radius:20px;
+  font-size:10px; font-weight:500; margin:3px 3px 0 0;
+}
+.c-amber  { background:rgba(255,194,51,0.12); color:#FFC233; border:0.5px solid rgba(255,194,51,0.25); }
+.c-coral  { background:rgba(255,174,165,0.15); color:#ffb5ab; border:0.5px solid rgba(255,174,165,0.25); }
+.c-teal   { background:rgba(137,209,197,0.12); color:#89d0c5; border:0.5px solid rgba(137,209,197,0.25); }
+.c-purple { background:rgba(197,160,240,0.12); color:#c5a0f0; border:0.5px solid rgba(197,160,240,0.25); }
+.c-blue   { background:rgba(126,184,255,0.12); color:#7eb8ff; border:0.5px solid rgba(126,184,255,0.25); }
+.c-green  { background:rgba(40,200,64,0.12);   color:#28c840; border:0.5px solid rgba(40,200,64,0.25); }
+
+/* ── STAGE CARDS ───────────────────────────────────────── */
+.stage-card {
+  background:#030308; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:16px;
+}
+.st-eyebrow {
+  font-size:11px; letter-spacing:0.32em; color:#FFC233;
+  text-transform:uppercase; opacity:0; transform:translateY(8px);
+  transition:opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s;
+}
+.st-title {
+  font-size:33px; font-weight:700; color:white; text-align:center;
+  opacity:0; transform:translateY(8px);
+  transition:opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s;
+}
+.st-line {
+  width:44px; height:1px; background:rgba(255,194,51,0.4);
+  opacity:0; transition:opacity 0.7s ease 0.65s;
+}
+.scene.active .st-eyebrow, .scene.active .st-title { opacity:1; transform:translateY(0); }
+.scene.active .st-line { opacity:1; }
+
+/* ── SCENE: TERMINAL ───────────────────────────────────── */
+#s1 { background:radial-gradient(ellipse at 15% 85%, rgba(18,12,35,0.9) 0%, transparent 55%), #040408; }
+
+.term-wrap { position:absolute; left:48px; top:62px; right:376px; bottom:44px; }
+.term-win {
+  width:100%; height:100%; background:#090912; border-radius:12px;
+  border:0.5px solid rgba(255,255,255,0.08); overflow:hidden; display:flex; flex-direction:column;
+}
+.term-bar {
+  height:36px; background:#10101a; flex-shrink:0;
+  display:flex; align-items:center; padding:0 14px; gap:7px;
+  border-bottom:0.5px solid rgba(255,255,255,0.05);
+}
+.dot { width:11px; height:11px; border-radius:50%; }
+.d-r{background:#ff5f57;} .d-y{background:#febc2e;} .d-g{background:#28c840;}
+.term-bar-title {
+  flex:1; text-align:center; font-size:11px; color:rgba(255,255,255,0.2);
+  font-family:'SF Mono','Fira Code','Courier New',monospace;
+}
+.term-body {
+  flex:1; padding:16px 20px; overflow:hidden;
+  font-family:'SF Mono','Fira Code','Courier New',monospace; font-size:12.5px; line-height:1.8;
+}
+.tc-prompt{color:#FFC233;} .tc-cmd{color:rgba(255,255,255,0.82);} .tc-flag{color:#89d0c5;}
+.tc-url{color:#7eb8ff;} .tc-head{color:rgba(255,255,255,0.3);} .tc-status{color:#28c840;}
+.tc-brace{color:rgba(255,255,255,0.38);} .tc-key{color:#FFAEA5;} .tc-str{color:#89d0c5;}
+.tc-num{color:#FFC233;} .tc-bool{color:#c5a0f0;} .tc-blank{color:transparent;}
+.cursor {
+  display:inline-block; width:7px; height:13px; vertical-align:middle;
+  background:#FFC233; animation:blink 0.85s step-end infinite;
+}
+@keyframes blink { 50%{opacity:0;} }
+
+.ann-panel { position:absolute; right:32px; top:62px; width:312px; bottom:44px; display:flex; flex-direction:column; gap:9px; }
+.ann-card {
+  background:rgba(255,255,255,0.03); border:0.5px solid rgba(255,255,255,0.07);
+  border-radius:10px; padding:12px 15px;
+  opacity:0; transform:translateX(10px);
+  transition:opacity 0.5s ease, transform 0.5s ease;
+}
+.ann-card.show { opacity:1; transform:translateX(0); }
+.ann-tag { font-size:9px; color:rgba(255,255,255,0.25); letter-spacing:0.09em; text-transform:uppercase; margin-bottom:4px; }
+.ann-main { font-size:13px; color:rgba(255,255,255,0.88); font-weight:500; margin-bottom:2px; }
+.ann-detail { font-size:11px; color:rgba(255,255,255,0.4); line-height:1.45; }
+
+/* ── SCENE: CASCADE ────────────────────────────────────── */
+#s2 { background:#030308; display:flex; align-items:center; justify-content:center; }
+
+.cascade { display:flex; flex-direction:column; align-items:center; width:900px; padding-top:30px; }
+.casc-row { display:flex; align-items:center; width:100%; margin-bottom:0; }
+.casc-layer {
+  flex:1; height:72px; display:flex; align-items:center; gap:14px;
+  padding:0 22px; border-radius:10px;
+  border:0.5px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);
+  opacity:0.15; transform:scaleX(0.97);
+  transition:opacity 0.7s ease, transform 0.7s ease, border-color 0.7s ease, background 0.7s ease;
+}
+.casc-layer.lit { opacity:1; transform:scaleX(1); background:rgba(255,255,255,0.045); border-color:rgba(255,255,255,0.12); }
+.casc-icon {
+  width:38px; height:38px; border-radius:9px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:19px;
+}
+.casc-body { flex:1; }
+.casc-title { font-size:14px; font-weight:500; color:rgba(255,255,255,0.88); margin-bottom:2px; }
+.casc-sub { font-size:11.5px; color:rgba(255,255,255,0.35); }
+.casc-badge-wrap { opacity:0; transition:opacity 0.4s ease 0.25s; }
+.casc-layer.lit .casc-badge-wrap { opacity:1; }
+.casc-arrow {
+  display:flex; justify-content:center; height:22px; align-items:center;
+  opacity:0; transition:opacity 0.4s ease;
+  width:100%;
+}
+.casc-arrow.show { opacity:1; }
+.casc-arrow-line { width:1px; height:22px; background:rgba(255,255,255,0.15); }
+
+/* ── PHONE SCENE ───────────────────────────────────────── */
+.phone-scene {
+  background:radial-gradient(ellipse at 50% 50%, #0d0b14 0%, #030308 70%);
+}
+/* Left panel */
+.l-panel {
+  position:absolute; left:0; top:0; width:640px; height:720px;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:70px 56px; gap:11px;
+}
+.l-card {
+  background:rgba(255,255,255,0.03); border:0.5px solid rgba(255,255,255,0.07);
+  border-radius:10px; padding:13px 15px;
+  opacity:0; transform:translateX(-8px);
+  transition:opacity 0.5s ease, transform 0.5s ease;
+}
+.l-card.show { opacity:1; transform:translateX(0); }
+.l-label { font-size:9px; color:rgba(255,255,255,0.25); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px; }
+.l-val { font-size:13px; color:rgba(255,255,255,0.88); font-weight:500; }
+.l-sub { font-size:11px; color:rgba(255,255,255,0.38); margin-top:2px; line-height:1.4; }
+
+/* Phone frame */
+.phone {
+  position:absolute; right:0; top:0; width:640px; height:720px;
+  display:flex; align-items:center; justify-content:center;
+}
+.phone-frame {
+  width:342px; height:696px;
+  border-radius:48px; border:10px solid #111;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.07), 0 0 0 1px rgba(255,255,255,0.04), 0 30px 70px rgba(0,0,0,0.75);
+  overflow:hidden; position:relative;
+  background:#0a0a0a;
+}
+.phone-frame::before { /* notch */
+  content:''; position:absolute; top:8px; left:50%; transform:translateX(-50%);
+  width:90px; height:28px; border-radius:18px; background:#0a0a0a; z-index:99;
+}
+.p-inner { width:100%; height:100%; position:relative; overflow:hidden; }
+.p-layer { position:absolute; inset:0; }
+#chat-layer { opacity:0; transition:opacity 0.7s ease; z-index:60; }
+#chat-layer.show { opacity:1; }
+
+/* Warm library background recreation */
+.app-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 85% 50% at 62% 14%, rgba(198,148,62,0.58) 0%, rgba(145,95,32,0.3) 22%, transparent 52%),
+    radial-gradient(ellipse 65% 55% at 8% 58%, rgba(118,78,28,0.52) 0%, transparent 45%),
+    radial-gradient(ellipse 75% 65% at 88% 88%, rgba(75,52,16,0.45) 0%, transparent 40%),
+    linear-gradient(172deg, #2e1c06 0%, #1d1208 28%, #110d06 58%, #080604 100%);
+}
+.app-bg::after {
+  content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    to bottom, transparent 0, transparent 52px, rgba(28,18,6,0.38) 52px, rgba(28,18,6,0.38) 54px
+  ); opacity:0.45;
+}
+
+/* Status bar */
+.sbar {
+  position:absolute; top:0; left:0; right:0; height:50px;
+  display:flex; align-items:flex-end; padding:0 20px 8px; z-index:20;
+}
+.sbar-time { font-size:15px; font-weight:600; color:white; }
+.sbar-icons { margin-left:auto; display:flex; align-items:center; gap:5px; }
+
+/* MC header */
+.mc-hdr {
+  position:absolute; top:48px; right:16px; z-index:15;
+  display:flex; align-items:center; gap:5px;
+  background:rgba(0,0,0,0.2); border-radius:20px; padding:3px 10px 3px 5px;
+}
+.mc-coin {
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  background:radial-gradient(circle at 32% 28%, #ffe080 0%, #FFC233 42%, #d4920a 78%, #a06800 100%);
+  border:1px solid rgba(255,215,70,0.4);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:800; color:rgba(80,40,0,0.8);
+}
+.mc-num { font-size:15px; font-weight:600; color:white; }
+
+/* Home screen */
+.home-title {
+  position:absolute; top:95px; left:0; right:0; text-align:center;
+  font-size:26px; font-weight:700; color:white;
+}
+.home-title span { opacity:0.6; font-weight:400; }
+
+.spheres-wrap {
+  position:absolute; top:140px; left:0; right:0; height:390px;
+  display:flex; align-items:center; justify-content:center;
+}
+.particles {
+  width:190px; height:190px; border-radius:50%;
+  background:
+    radial-gradient(circle, rgba(220,100,110,0.35) 1px, transparent 1px) 0 0/13px 13px,
+    radial-gradient(circle, rgba(100,185,175,0.3) 1px, transparent 1px) 6px 5px/18px 19px,
+    radial-gradient(circle, rgba(55,75,115,0.32) 1px, transparent 1px) 3px 8px/24px 23px,
+    radial-gradient(circle, rgba(232,168,48,0.28) 1px, transparent 1px) 9px 2px/21px 17px;
+  animation:p-rot 14s linear infinite;
+}
+@keyframes p-rot { to{transform:rotate(360deg);} }
+
+.sphere {
+  position:absolute; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:600; color:white;
+  text-shadow:0 1px 3px rgba(0,0,0,0.4);
+  box-shadow:0 4px 18px rgba(0,0,0,0.3);
+}
+.sp-soc { background:#e0939a; width:96px; height:96px; top:-48px; right:12px; }
+.sp-hab { background:#7aada8; width:82px; height:82px; top:28px;  left:-8px; }
+.sp-slp { background:#e8a82e; width:88px; height:88px; bottom:28px; right:24px; }
+.sp-pre { background:#374B73; width:78px; height:78px; bottom:16px; left:18px; }
+
+/* Push notification */
+.push-notif {
+  position:absolute; top:52px; left:8px; right:8px; z-index:50;
+  background:rgba(42,35,22,0.9); backdrop-filter:blur(18px);
+  border-radius:16px; border:0.5px solid rgba(255,255,255,0.11);
+  padding:13px 13px; display:flex; gap:11px; align-items:flex-start;
+  box-shadow:0 8px 28px rgba(0,0,0,0.55);
+  transform:translateY(-130px); transition:transform 0.55s cubic-bezier(0.2,0.8,0.3,1);
+}
+.push-notif.in { transform:translateY(0); }
+.p-icon {
+  width:38px; height:38px; border-radius:10px; flex-shrink:0;
+  background:radial-gradient(circle at 32% 28%, #ffe080 0%, #FFC233 42%, #d4920a 78%, #a06800 100%);
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+  border:0.5px solid rgba(255,215,70,0.3);
+}
+.p-body { flex:1; }
+.p-title { font-size:13px; font-weight:600; color:rgba(255,255,255,0.95); margin-bottom:2px; }
+.p-msg { font-size:11.5px; color:rgba(255,255,255,0.62); line-height:1.4; }
+.p-time { font-size:11px; color:rgba(255,255,255,0.28); flex-shrink:0; }
+
+/* Bottom nav */
+.bnav {
+  position:absolute; bottom:14px; left:10px; right:10px; height:58px;
+  background:rgba(46,38,24,0.75); backdrop-filter:blur(22px);
+  border-radius:29px; border:0.5px solid rgba(255,255,255,0.09);
+  display:flex; align-items:center; justify-content:space-around; z-index:20;
+}
+.n-item { display:flex; flex-direction:column; align-items:center; gap:2px; flex:1; padding:6px 0; }
+.n-lbl { font-size:9px; color:rgba(255,255,255,0.38); }
+.n-item.on .n-lbl { color:white; }
+
+/* Chat screen */
+.chat-hdr {
+  position:absolute; top:50px; left:0; right:0; z-index:10;
+  text-align:center; padding:10px 20px 10px;
+  border-bottom:0.5px solid rgba(255,255,255,0.07);
+}
+.chat-hdr-name { font-size:16px; font-weight:600; color:white; }
+.chat-hdr-sub { font-size:10.5px; color:rgba(255,255,255,0.35); margin-top:1px; }
+.chat-msgs {
+  position:absolute; top:128px; left:0; right:0; bottom:88px;
+  padding:10px 12px; display:flex; flex-direction:column; gap:9px; overflow:hidden;
+}
+.msg {
+  max-width:84%; font-size:12.5px; line-height:1.55; padding:9px 12px; border-radius:16px;
+  opacity:0; transform:translateY(5px); transition:opacity 0.4s ease, transform 0.4s ease;
+}
+.msg.show { opacity:1; transform:translateY(0); }
+.m-a { background:rgba(48,40,26,0.85); color:rgba(255,255,255,0.82); align-self:flex-start; border-bottom-left-radius:4px; }
+.m-u {
+  background:rgba(255,194,51,0.16); color:rgba(255,255,255,0.88);
+  align-self:flex-end; border-bottom-right-radius:4px; border:0.5px solid rgba(255,194,51,0.18);
+}
+.typing { display:flex; gap:4px; align-items:center; align-self:flex-start;
+  background:rgba(48,40,26,0.85); padding:9px 12px; border-radius:16px; border-bottom-left-radius:4px;
+  opacity:0; transition:opacity 0.3s ease;
+}
+.typing.show { opacity:1; }
+.td { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.38); animation:tb 1.2s ease infinite; }
+.td:nth-child(2){animation-delay:0.2s;} .td:nth-child(3){animation-delay:0.4s;}
+@keyframes tb { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);} }
+
+.chat-input-bar { position:absolute; bottom:88px; left:0; right:0; padding:7px 11px; border-top:0.5px solid rgba(255,255,255,0.06); }
+.chat-pill { background:rgba(48,40,26,0.6); border-radius:20px; padding:9px 13px; font-size:12px; color:rgba(255,255,255,0.28); border:0.5px solid rgba(255,255,255,0.07); }
+
+/* ── SCENE: AGENT SKILLS ───────────────────────────────── */
+#s4 { background:linear-gradient(140deg, #040408 0%, #07040c 100%); }
+
+.feat-col {
+  position:absolute; left:56px; top:118px; width:300px;
+  display:flex; flex-direction:column; gap:11px;
+}
+.skill-col {
+  position:absolute; right:56px; top:150px; width:332px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.skill {
+  font-family:'SF Mono','Fira Code','Courier New',monospace;
+  font-size:12.5px; color:#89d0c5;
+  background:rgba(137,209,197,0.06); border:0.5px solid rgba(137,209,197,0.2);
+  border-radius:8px; padding:10px 14px;
+  opacity:0; transform:translateX(10px);
+  transition:opacity 0.5s ease, transform 0.5s ease;
+}
+.skill.show { opacity:1; transform:translateX(0); }
+.sk-desc {
+  font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+  font-size:10.5px; color:rgba(255,255,255,0.35); margin-top:3px;
+}
+.agent-core {
+  position:absolute; left:558px; top:276px; width:164px; height:164px;
+  border-radius:50%; padding:0 16px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; gap:4px;
+  background:radial-gradient(circle at 35% 30%, rgba(255,194,51,0.16), rgba(255,194,51,0.04) 60%, rgba(255,194,51,0.01));
+  border:1px solid rgba(255,194,51,0.35);
+  box-shadow:0 0 0 10px rgba(255,194,51,0.05), 0 0 0 22px rgba(255,194,51,0.02);
+  opacity:0; transform:scale(0.85);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.agent-core.show { opacity:1; transform:scale(1); animation:ac-pulse 2.6s ease infinite 1s; }
+@keyframes ac-pulse {
+  0%,100%{box-shadow:0 0 0 10px rgba(255,194,51,0.05),0 0 0 22px rgba(255,194,51,0.02);}
+  50%{box-shadow:0 0 0 14px rgba(255,194,51,0.08),0 0 0 28px rgba(255,194,51,0.03);}
+}
+.ac-title { font-size:13px; font-weight:600; color:white; }
+.ac-sub { font-size:9.5px; color:rgba(255,255,255,0.45); line-height:1.45; }
+
+#sk-svg { position:absolute; inset:0; pointer-events:none; }
+#sk-svg path {
+  fill:none; stroke-width:1;
+  stroke-dasharray:1; stroke-dashoffset:1;
+  transition:stroke-dashoffset 0.9s ease;
+}
+#sk-svg g.show path { stroke-dashoffset:0; }
+#sk-svg g path:nth-child(2) { transition-delay:0.1s; }
+#sk-svg g path:nth-child(3) { transition-delay:0.2s; }
+#sk-svg g path:nth-child(4) { transition-delay:0.3s; }
+#sk-svg g path:nth-child(5) { transition-delay:0.4s; }
+#sk-svg g path:nth-child(6) { transition-delay:0.5s; }
+
+.sk-caption {
+  position:absolute; bottom:40px; left:0; right:0; text-align:center;
+  font-size:15px; color:rgba(255,255,255,0.5);
+  opacity:0; transition:opacity 0.7s ease;
+}
+.sk-caption.show { opacity:1; }
+.sk-caption strong { color:rgba(255,255,255,0.9); font-weight:600; }
+
+/* ── SCENE: GOVERNED LIFECYCLE ─────────────────────────── */
+#s5 { background:linear-gradient(140deg, #040408 0%, #060410 100%); }
+
+.gov-node {
+  position:absolute; width:280px; border-radius:12px; padding:13px 15px;
+  background:rgba(255,255,255,0.022); border:0.5px solid rgba(255,255,255,0.06);
+  opacity:0.12; transform:translateY(8px);
+  transition:opacity 0.6s ease, transform 0.6s ease, border-color 0.6s ease, background 0.6s ease;
+}
+.gov-node.lit { opacity:1; transform:translateY(0); background:rgba(255,255,255,0.045); }
+.gn-amber.lit { border-color:rgba(255,194,51,0.3); }
+.gn-blue.lit  { border-color:rgba(126,184,255,0.32); }
+.gn-green.lit { border-color:rgba(40,200,64,0.3); }
+.gn-head { display:flex; align-items:center; gap:9px; margin-bottom:6px; }
+.gn-icon {
+  width:30px; height:30px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.gn-title { font-size:13.5px; font-weight:600; color:rgba(255,255,255,0.9); }
+.gn-sub { font-size:11px; color:rgba(255,255,255,0.42); line-height:1.5; margin-bottom:7px; }
+.gov-node .chip { margin:0; }
+
+#gv-svg { position:absolute; inset:0; pointer-events:none; }
+#gv-svg path {
+  fill:none; stroke-width:1.2;
+  stroke-dasharray:1; stroke-dashoffset:1;
+  transition:stroke-dashoffset 0.8s ease;
+}
+#gv-svg path.show { stroke-dashoffset:0; }
+
+.gv-side {
+  position:absolute; top:50%; font-size:10px; letter-spacing:0.26em;
+  text-transform:uppercase; writing-mode:vertical-rl;
+  opacity:0; transition:opacity 0.8s ease;
+}
+.gv-side.show { opacity:1; }
+#gv-left  { left:20px;  transform:translateY(-50%) rotate(180deg); color:rgba(126,184,255,0.55); }
+#gv-right { right:20px; transform:translateY(-50%); color:rgba(95,217,122,0.55); }
+
+#gv-center {
+  position:absolute; left:460px; top:316px; width:360px; text-align:center;
+  opacity:0; transition:opacity 0.8s ease;
+}
+#gv-center.show { opacity:1; }
+.gvc-eyebrow { font-size:9px; letter-spacing:0.22em; color:rgba(255,255,255,0.3); text-transform:uppercase; margin-bottom:5px; }
+.gvc-txt { font-size:13px; color:rgba(255,255,255,0.6); }
+.gvc-txt strong { color:rgba(255,255,255,0.85); font-weight:600; }
+
+/* ── END CARD ──────────────────────────────────────────── */
+#s-end {
+  background:#030308; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.e-an { opacity:0; transform:translateY(6px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.e-an.show { opacity:1; transform:translateY(0); }
+.gp-box {
+  width:340px; border-radius:12px; padding:15px; text-align:center;
+  font-size:18px; font-weight:600;
+}
+.gp-box span { display:block; font-size:11px; font-weight:400; margin-top:3px; opacity:0.55; }
+.gp-auth  { background:rgba(126,184,255,0.08); border:0.5px solid rgba(126,184,255,0.3);  color:#7eb8ff; }
+.gp-proof { background:rgba(40,200,64,0.06);   border:0.5px solid rgba(40,200,64,0.25);   color:#5fd97a; }
+.gp-arrows { display:flex; gap:52px; margin:16px 0; align-items:center; }
+.gp-ar {
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  font-size:10px; letter-spacing:0.2em; font-weight:600;
+  font-family:'SF Mono','Fira Code','Courier New',monospace;
+}
+.gp-ar svg { display:block; }
+.ar-decide { color:#7eb8ff; }
+.ar-prove  { color:#5fd97a; }
+.end-msg {
+  margin-top:38px; font-size:24px; font-weight:700; color:white;
+  text-align:center; letter-spacing:0.01em;
+}
+.end-sub {
+  margin-top:9px; font-size:14px; color:rgba(255,255,255,0.45); text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div id="wordmark">rumii</div>
+
+<!-- SVG ICONS (shared) -->
+<svg style="display:none">
+  <symbol id="ico-home" viewBox="0 0 24 24" fill="none">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8"/>
+  </symbol>
+  <symbol id="ico-dash" viewBox="0 0 24 24" fill="none">
+    <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" stroke="currentColor" stroke-width="1.6"/>
+  </symbol>
+  <symbol id="ico-chat" viewBox="0 0 24 24" fill="none">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/>
+  </symbol>
+  <symbol id="ico-user" viewBox="0 0 24 24" fill="none">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8"/>
+    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/>
+  </symbol>
+</svg>
+
+<!-- ═══ STAGE CARD 1 ════════════════════════════════════════ -->
+<div id="sc1" class="scene stage-card">
+  <div class="st-eyebrow">Stage 1</div>
+  <div class="st-title">Current baseline</div>
+  <div class="st-line"></div>
+</div>
+
+<!-- ═══ SCENE 1: TERMINAL ═══════════════════════════════════ -->
+<div id="s1" class="scene">
+  <div class="scene-badge">
+    <div class="badge-num">01</div>
+    <div><div class="badge-title">Backend API</div><div class="badge-sub">Phenotype endpoint · live response</div></div>
+  </div>
+
+  <div class="term-wrap">
+    <div class="term-win">
+      <div class="term-bar">
+        <div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div>
+        <div class="term-bar-title">rumii phenotype API — sarah-07823</div>
+      </div>
+      <div class="term-body"><span id="term-out"></span><span class="cursor" id="cur"></span></div>
+    </div>
+  </div>
+
+  <div class="ann-panel">
+    <div class="ann-card" id="a1">
+      <div class="ann-tag">Trial participant</div>
+      <div class="ann-main">Sarah, 19 — IBD Trial Cohort 03</div>
+      <div class="ann-detail">Week 3 · recently relocated to university · behavioural baseline established</div>
+    </div>
+    <div class="ann-card" id="a2">
+      <div class="ann-tag">Attachment phenotype</div>
+      <div class="ann-main">Anxious-preoccupied · stability 0.42</div>
+      <div class="ann-detail">Clusters A · C · F active — sleep disruption · social surface shift · in-person fragmentation</div>
+      <span class="chip c-coral">PNI cascade risk</span>
+      <span class="chip c-amber">Risk tier: amber</span>
+    </div>
+    <div class="ann-card" id="a3">
+      <div class="ann-tag">Intervention window</div>
+      <div class="ann-main">Readiness Stage 3 — optimal</div>
+      <div class="ann-detail">Receptive, exploratory · 72h cooldown respected · eligible now</div>
+      <span class="chip c-green">Eligible</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCENE 2: CASCADE ════════════════════════════════════ -->
+<div id="s2" class="scene">
+  <div class="scene-badge">
+    <div class="badge-num">02</div>
+    <div><div class="badge-title">Signal cascade</div><div class="badge-sub">Raw signals → clinical phenotype</div></div>
+  </div>
+
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:30px;">
+    <div class="cascade">
+
+      <div class="casc-row"><div class="casc-layer" id="cl1">
+        <div class="casc-icon" style="background:rgba(137,161,157,0.14);">📱</div>
+        <div class="casc-body">
+          <div class="casc-title">Passive sensor signals</div>
+          <div class="casc-sub">Battery-preserving · no wearables · smartphone only · always-on</div>
+        </div>
+        <div class="casc-badge-wrap"><span class="chip c-teal">Screen · motion · ambient · comms</span></div>
+      </div></div>
+      <div class="casc-arrow" id="ca1"><div class="casc-arrow-line"></div></div>
+
+      <div class="casc-row"><div class="casc-layer" id="cl2">
+        <div class="casc-icon" style="background:rgba(255,194,51,0.12);">⚡</div>
+        <div class="casc-body">
+          <div class="casc-title">Derived behavioural features</div>
+          <div class="casc-sub">Sleep · sociability · presence · habits · rolling 14-day individual baseline</div>
+        </div>
+        <div class="casc-badge-wrap"><span class="chip c-amber">4 domain models active</span></div>
+      </div></div>
+      <div class="casc-arrow" id="ca2"><div class="casc-arrow-line"></div></div>
+
+      <div class="casc-row"><div class="casc-layer" id="cl3">
+        <div class="casc-icon" style="background:rgba(197,160,240,0.12);">🔮</div>
+        <div class="casc-body">
+          <div class="casc-title">Pattern cluster classification</div>
+          <div class="casc-sub">Clusters A–F · deviation scored against personalised rolling baseline</div>
+        </div>
+        <div class="casc-badge-wrap"><span class="chip c-purple">Clusters A · C · F active</span></div>
+      </div></div>
+      <div class="casc-arrow" id="ca3"><div class="casc-arrow-line"></div></div>
+
+      <div class="casc-row"><div class="casc-layer" id="cl4">
+        <div class="casc-icon" style="background:rgba(255,174,165,0.13);">🧬</div>
+        <div class="casc-body">
+          <div class="casc-title">Behavioural phenotype</div>
+          <div class="casc-sub">Attachment subtype · clinical profile · risk tier · proprietary IP</div>
+        </div>
+        <div class="casc-badge-wrap"><span class="chip c-coral">Anxious-preoccupied · stability 0.42</span></div>
+      </div></div>
+      <div class="casc-arrow" id="ca4"><div class="casc-arrow-line"></div></div>
+
+      <div class="casc-row"><div class="casc-layer" id="cl5" style="border-color:rgba(55,75,115,0.15);">
+        <div class="casc-icon" style="background:rgba(55,75,115,0.18);">🎯</div>
+        <div class="casc-body">
+          <div class="casc-title">Clinical reasoning agent</div>
+          <div class="casc-sub">State-action-response triplet generated · JITAI trigger dispatched</div>
+        </div>
+        <div class="casc-badge-wrap"><span class="chip c-blue">Risk amber · intervention eligible</span></div>
+      </div></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCENE 3: DELIVERY → CHAT (blended phone) ════════════ -->
+<div id="s3" class="scene phone-scene">
+  <div class="scene-badge">
+    <div class="badge-num">03</div>
+    <div><div class="badge-title">Intervention + conversation</div><div class="badge-sub">Push delivery → adaptive chat · Stage 3</div></div>
+  </div>
+
+  <div class="l-panel">
+    <div class="l-card" id="lc3-1">
+      <div class="l-label">Dispatch origin</div>
+      <div class="l-val">JITAI Engine</div>
+      <div class="l-sub">Trend-based trigger · 7-day window · amber risk threshold crossed</div>
+    </div>
+    <div class="l-card" id="lc3-2">
+      <div class="l-label">Delivery pipeline</div>
+      <div class="l-val">Firebase Cloud Messaging</div>
+      <div class="l-sub">Warm · low friction · invitation not demand · no diagnostic language</div>
+    </div>
+    <div class="l-card" id="lc3-3">
+      <div class="l-label">Active stance</div>
+      <div class="l-val">Warm · Containing</div>
+      <div class="l-sub">Optionality: high · Directiveness: low · attachment-modulated frame · Stage 3 opening</div>
+    </div>
+    <div class="l-card" id="lc3-4">
+      <div class="l-label">Live signal read</div>
+      <div class="l-val">Arousal: moderate → ↓</div>
+      <div class="l-sub">No acute state · grounding not triggered · response: positive engagement</div>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="phone-frame">
+      <div class="p-inner">
+
+        <!-- Home layer -->
+        <div class="p-layer" id="home-layer">
+          <div class="app-bg"></div>
+          <div class="sbar">
+            <span class="sbar-time">09:14</span>
+            <div class="sbar-icons">
+              <svg width="15" height="11" viewBox="0 0 15 11"><rect x="0" y="7" width="3" height="4" fill="white" opacity="0.4" rx="0.5"/><rect x="4" y="5" width="3" height="6" fill="white" opacity="0.6" rx="0.5"/><rect x="8" y="2" width="3" height="9" fill="white" opacity="0.8" rx="0.5"/><rect x="12" y="0" width="3" height="11" fill="white" rx="0.5"/></svg>
+              <svg width="14" height="10" viewBox="0 0 14 10"><path d="M7 1.5C4.5 1.5 2.2 3 1 5L2.5 6.5C3.4 5 5.1 4 7 4s3.6 1 4.5 2.5L13 5C11.8 3 9.5 1.5 7 1.5z" fill="white"/><path d="M7 5C5.5 5 4.3 5.8 3.6 7L5 8.4C5.4 7.6 6.1 7 7 7s1.6.6 2 1.4L10.4 7C9.7 5.8 8.5 5 7 5z" fill="white"/><circle cx="7" cy="9.5" r="1" fill="white"/></svg>
+              <svg width="24" height="12" viewBox="0 0 24 12"><rect x="0" y="1.5" width="21" height="9" rx="2.5" stroke="white" stroke-width="1" fill="none" opacity="0.5"/><rect x="21.5" y="3.5" width="2" height="5" rx="1" fill="white" opacity="0.5"/><rect x="1" y="2.5" width="14" height="7" rx="1.5" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="mc-hdr"><div class="mc-coin">MC</div><span class="mc-num">250</span></div>
+          <div class="home-title">Welcome, <span>sarah</span></div>
+          <div class="spheres-wrap">
+            <div class="particles"></div>
+            <div class="sphere sp-soc">Sociability</div>
+            <div class="sphere sp-hab">Habits</div>
+            <div class="sphere sp-slp">Sleep</div>
+            <div class="sphere sp-pre">Presence</div>
+          </div>
+          <div class="push-notif" id="pn3">
+            <div class="p-icon">🧠</div>
+            <div class="p-body">
+              <div class="p-title">rumii</div>
+              <div class="p-msg">Hey Sarah — how are you settling in? The first few weeks at uni can be a lot. 🌱</div>
+            </div>
+            <div class="p-time">now</div>
+          </div>
+          <div class="bnav">
+            <div class="n-item on"><svg width="20" height="20"><use href="#ico-home" style="color:white"/></svg><span class="n-lbl" style="color:white">Home</span></div>
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-dash" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Dashboard</span></div>
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-chat" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Chat</span></div>
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-user" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Profile</span></div>
+          </div>
+        </div>
+
+        <!-- Chat layer (fades in over home) -->
+        <div class="p-layer" id="chat-layer">
+          <div class="app-bg"></div>
+          <div class="sbar">
+            <span class="sbar-time">09:16</span>
+            <div class="sbar-icons">
+              <svg width="15" height="11" viewBox="0 0 15 11"><rect x="0" y="7" width="3" height="4" fill="white" opacity="0.4" rx="0.5"/><rect x="4" y="5" width="3" height="6" fill="white" opacity="0.6" rx="0.5"/><rect x="8" y="2" width="3" height="9" fill="white" opacity="0.8" rx="0.5"/><rect x="12" y="0" width="3" height="11" fill="white" rx="0.5"/></svg>
+              <svg width="24" height="12" viewBox="0 0 24 12"><rect x="0" y="1.5" width="21" height="9" rx="2.5" stroke="white" stroke-width="1" fill="none" opacity="0.5"/><rect x="21.5" y="3.5" width="2" height="5" rx="1" fill="white" opacity="0.5"/><rect x="1" y="2.5" width="16" height="7" rx="1.5" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="chat-hdr">
+            <div class="chat-hdr-name">rumii</div>
+            <div class="chat-hdr-sub">behavioural health support</div>
+          </div>
+          <div class="chat-msgs" id="cmsg">
+            <div class="msg m-a" id="m1">Hey Sarah — how are you settling in? The first few weeks at uni can be a lot. 🌱</div>
+            <div class="msg m-u" id="m2">Honestly pretty exhausting. Been struggling to sleep in my new room.</div>
+            <div class="typing" id="ty1"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+            <div class="msg m-a" id="m3">That makes a lot of sense — new spaces take time to feel safe enough to really rest in. How long has it been like this?</div>
+            <div class="msg m-u" id="m4">About a week. And I'm around people all day but still feel kind of... disconnected.</div>
+            <div class="typing" id="ty2"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+            <div class="msg m-a" id="m5">Being busy and still feeling alone — that's one of the harder ones. You're in the middle of something that takes longer than a week to settle. That feeling makes complete sense. 💙</div>
+          </div>
+          <div class="chat-input-bar"><div class="chat-pill">Type a message...</div></div>
+          <div class="bnav">
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-home" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Home</span></div>
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-dash" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Dashboard</span></div>
+            <div class="n-item on"><svg width="20" height="20"><use href="#ico-chat" style="color:white"/></svg><span class="n-lbl" style="color:white">Chat</span></div>
+            <div class="n-item"><svg width="20" height="20"><use href="#ico-user" style="color:rgba(255,255,255,0.45)"/></svg><span class="n-lbl">Profile</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STAGE CARD 2 ════════════════════════════════════════ -->
+<div id="sc2" class="scene stage-card">
+  <div class="st-eyebrow">Stage 2</div>
+  <div class="st-title">Features become agent skills</div>
+  <div class="st-line"></div>
+</div>
+
+<!-- ═══ SCENE 4: AGENT SKILLS ═══════════════════════════════ -->
+<div id="s4" class="scene">
+  <div class="scene-badge">
+    <div class="badge-num">04</div>
+    <div><div class="badge-title">Agent skills</div><div class="badge-sub">Deterministic pipeline → contracted reasoning surface</div></div>
+  </div>
+
+  <svg id="sk-svg" width="1280" height="720" viewBox="0 0 1280 720">
+    <g id="lp">
+      <path d="M356,154 Q470,154 560,346" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+      <path d="M356,237 Q470,237 558,352" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+      <path d="M356,320 Q470,320 557,358" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+      <path d="M356,403 Q470,403 557,364" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+      <path d="M356,486 Q470,486 558,370" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+      <path d="M356,569 Q470,569 560,376" pathLength="1" stroke="rgba(255,194,51,0.32)"/>
+    </g>
+    <g id="rp">
+      <path d="M722,348 Q806,181 888,181" pathLength="1" stroke="rgba(137,209,197,0.4)"/>
+      <path d="M722,354 Q806,255 888,255" pathLength="1" stroke="rgba(137,209,197,0.4)"/>
+      <path d="M722,358 Q806,329 888,329" pathLength="1" stroke="rgba(137,209,197,0.4)"/>
+      <path d="M722,364 Q806,403 888,403" pathLength="1" stroke="rgba(137,209,197,0.4)"/>
+      <path d="M722,370 Q806,477 888,477" pathLength="1" stroke="rgba(137,209,197,0.4)"/>
+    </g>
+  </svg>
+
+  <div class="feat-col">
+    <div class="l-card" id="f1">
+      <div class="l-label">Sleep</div>
+      <div class="l-val">−52 min vs baseline</div>
+      <div class="l-sub">fragmentation +2.3σ · computed nightly</div>
+    </div>
+    <div class="l-card" id="f2">
+      <div class="l-label">Sociability</div>
+      <div class="l-val">Social surface ratio 0.71</div>
+      <div class="l-sub">contact shift vs personal baseline</div>
+    </div>
+    <div class="l-card" id="f3">
+      <div class="l-label">Presence</div>
+      <div class="l-val">In-person pattern fragmented</div>
+      <div class="l-sub">location intelligence · place transitions</div>
+    </div>
+    <div class="l-card" id="f4">
+      <div class="l-label">Habits</div>
+      <div class="l-val">Continuity 0.68</div>
+      <div class="l-sub">routine stability · streak structure</div>
+    </div>
+    <div class="l-card" id="f5">
+      <div class="l-label">Phenotype</div>
+      <div class="l-val">Anxious-preoccupied · 0.42</div>
+      <div class="l-sub">attachment subtype · risk tier amber</div>
+    </div>
+    <div class="l-card" id="f6">
+      <div class="l-label">Readiness</div>
+      <div class="l-val">Stage 3 · cooldown clear</div>
+      <div class="l-sub">intervention window open</div>
+    </div>
+  </div>
+
+  <div class="agent-core" id="acore">
+    <div class="ac-title">Clinical reasoning agent</div>
+    <div class="ac-sub">computes nothing —<br>reasons over contracted state</div>
+  </div>
+
+  <div class="skill-col">
+    <div class="skill" id="sk1">user_state.read<div class="sk-desc">the frozen state contract — one call, the whole picture</div></div>
+    <div class="skill" id="sk2">phenotype.snapshot<div class="sk-desc">subtype · stability index · risk tier</div></div>
+    <div class="skill" id="sk3">baseline.deltas<div class="sk-desc">14-day deviations, person-relative</div></div>
+    <div class="skill" id="sk4">readiness.window<div class="sk-desc">when an intervention can land</div></div>
+    <div class="skill" id="sk5">intervention.eligibility<div class="sk-desc">policy-gated yes/no, with reasons</div></div>
+  </div>
+
+  <div class="sk-caption" id="skcap"><strong>The agent computes nothing.</strong> It reasons over governed, contracted state.</div>
+</div>
+
+<!-- ═══ STAGE CARD 3 ════════════════════════════════════════ -->
+<div id="sc3" class="scene stage-card">
+  <div class="st-eyebrow">Stage 3</div>
+  <div class="st-title">The governed decision lifecycle</div>
+  <div class="st-line"></div>
+</div>
+
+<!-- ═══ SCENE 5: GOVERNED LIFECYCLE ═════════════════════════ -->
+<div id="s5" class="scene">
+  <div class="scene-badge">
+    <div class="badge-num">05</div>
+    <div><div class="badge-title">Governed lifecycle</div><div class="badge-sub">Five edges · one decision, end to end</div></div>
+  </div>
+
+  <div class="gv-side" id="gv-left">Authority — flows down</div>
+  <div class="gv-side" id="gv-right">Proof — flows back up</div>
+
+  <svg id="gv-svg" width="1280" height="720" viewBox="0 0 1280 720">
+    <defs>
+      <marker id="mb" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L8,4 L0,8 z" fill="rgba(126,184,255,0.7)"/>
+      </marker>
+      <marker id="mg" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L8,4 L0,8 z" fill="rgba(95,217,122,0.7)"/>
+      </marker>
+    </defs>
+    <path id="ge1" d="M200,242 L200,320" pathLength="1" stroke="rgba(126,184,255,0.5)" marker-end="url(#mb)"/>
+    <path id="ge2" d="M200,458 C200,540 330,556 488,556" pathLength="1" stroke="rgba(126,184,255,0.5)" marker-end="url(#mb)"/>
+    <path id="ge3" d="M792,556 C950,556 1080,540 1080,462" pathLength="1" stroke="rgba(95,217,122,0.5)" marker-end="url(#mg)"/>
+    <path id="ge4" d="M1080,320 L1080,242" pathLength="1" stroke="rgba(95,217,122,0.5)" marker-end="url(#mg)"/>
+  </svg>
+
+  <div class="gov-node gn-amber" id="n1" style="left:60px; top:108px;">
+    <div class="gn-head">
+      <div class="gn-icon" style="background:rgba(255,194,51,0.12);">⚡</div>
+      <div class="gn-title">Signal detected</div>
+    </div>
+    <div class="gn-sub">Sleep deficit −52 min · fragmentation +2.3σ — deviation against her own baseline, not a population norm.</div>
+    <span class="chip c-amber">trend trigger fired</span>
+  </div>
+
+  <div class="gov-node gn-blue" id="n2" style="left:60px; top:330px;">
+    <div class="gn-head">
+      <div class="gn-icon" style="background:rgba(126,184,255,0.12);">🛡️</div>
+      <div class="gn-title">Policy evaluated</div>
+    </div>
+    <div class="gn-sub">Hard-constraint envelope checked — consent, cooldown, readiness. Persisted with the decision, immutable.</div>
+    <span class="chip c-blue">envelope persisted · immutable</span>
+  </div>
+
+  <div class="gov-node gn-blue" id="n3" style="left:500px; top:498px;">
+    <div class="gn-head">
+      <div class="gn-icon" style="background:rgba(126,184,255,0.12);">📨</div>
+      <div class="gn-title">Intervention delivered</div>
+    </div>
+    <div class="gn-sub">Clinically authored copy · push via FCM · correlation id stamped on the delivery record.</div>
+    <span class="chip c-blue">delivered 09:14 · routable</span>
+  </div>
+
+  <div class="gov-node gn-green" id="n4" style="left:940px; top:330px;">
+    <div class="gn-head">
+      <div class="gn-icon" style="background:rgba(40,200,64,0.1);">👁️</div>
+      <div class="gn-title">Outcome observed</div>
+    </div>
+    <div class="gn-sub">Response windows 48h · 72h · 7d. An episode cannot close without a recorded outcome edge.</div>
+    <span class="chip c-green">outcome edge recorded</span>
+  </div>
+
+  <div class="gov-node gn-green" id="n5" style="left:940px; top:108px;">
+    <div class="gn-head">
+      <div class="gn-icon" style="background:rgba(40,200,64,0.1);">📜</div>
+      <div class="gn-title">Governance preserved</div>
+    </div>
+    <div class="gn-sub">Set-once governor verdict · append-only audit · ops and research planes joined by one correlation id.</div>
+    <span class="chip c-green">verdict PASS · audit joined</span>
+  </div>
+
+  <div id="gv-center">
+    <div class="gvc-eyebrow">One governed decision</div>
+    <div class="gvc-txt"><strong>Sarah · Episode #47</strong> — every edge accounted for,<br>end to end</div>
+  </div>
+</div>
+
+<!-- ═══ END CARD ═════════════════════════════════════════════ -->
+<div id="s-end" class="scene">
+  <div class="gp-box gp-auth e-an" id="ge-auth">Authority<span>flows down</span></div>
+  <div class="gp-arrows e-an" id="ge-arrows">
+    <div class="gp-ar ar-decide">
+      <svg width="12" height="34" viewBox="0 0 12 34"><line x1="6" y1="0" x2="6" y2="26" stroke="#7eb8ff" stroke-width="1.4"/><path d="M1,25 L6,33 L11,25" fill="none" stroke="#7eb8ff" stroke-width="1.4"/></svg>
+      DECIDE
+    </div>
+    <div class="gp-ar ar-prove">
+      <svg width="12" height="34" viewBox="0 0 12 34"><line x1="6" y1="34" x2="6" y2="8" stroke="#5fd97a" stroke-width="1.4"/><path d="M1,9 L6,1 L11,9" fill="none" stroke="#5fd97a" stroke-width="1.4"/></svg>
+      PROVE
+    </div>
+  </div>
+  <div class="gp-box gp-proof e-an" id="ge-proof">Proof<span>flows back up</span></div>
+  <div class="end-msg e-an" id="ge-msg">Authority flows down; proof flows back up.</div>
+  <div class="end-sub e-an" id="ge-sub">Provenance is the ledger that connects the two.</div>
+</div>
+
+<script>
+// ── UTILITIES ───────────────────────────────────────────────
+function at(ms, fn) { setTimeout(fn, ms); }
+function show(id) {
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('show','in','visible'); }
+}
+function showScene(id) { document.getElementById(id).classList.add('active'); }
+function hideScene(id) { document.getElementById(id).classList.remove('active'); }
+
+// ── TERMINAL TYPEWRITER ─────────────────────────────────────
+const tokens = [
+  ['prompt','$ '],['cmd','curl -s -X GET \\\n'],
+  ['cmd','     '],['flag','-H '],['str','"Authorization: Bearer $RUMII_API_KEY" \\\n'],
+  ['cmd','     '],['flag','-H '],['str','"Content-Type: application/json" \\\n'],
+  ['cmd','     '],['url','https://api.rumii.io/v1/phenotype/users/sarah-07823/current\n'],
+  ['blank','\n'],['head','HTTP/2 '],['status','200\n'],['head','content-type: '],['str','application/json\n'],
+  ['blank','\n'],['brace','{\n'],
+  ['key','  "user_id"'],['brace',': '],['str','"sarah-07823"'],['brace',',\n'],
+  ['key','  "cohort"'],['brace',': '],['str','"ibd-trial-03"'],['brace',',\n'],
+  ['key','  "timestamp"'],['brace',': '],['str','"2026-06-07T09:14:22Z"'],['brace',',\n'],
+  ['key','  "phenotype"'],['brace',': {\n'],
+  ['key','    "attachment_subtype"'],['brace',': '],['str','"anxious_preoccupied"'],['brace',',\n'],
+  ['key','    "stability_index"'],['brace',': '],['num','0.42'],['brace',',\n'],
+  ['key','    "clusters_active"'],['brace',': '],['str','["A","C","F"]'],['brace',',\n'],
+  ['key','    "risk_tier"'],['brace',': '],['str','"amber"'],['brace',',\n'],
+  ['key','    "readiness_stage"'],['brace',': '],['num','3'],['brace','\n  },\n'],
+  ['key','  "behavioural_deltas"'],['brace',': {\n'],
+  ['key','    "sleep_deficit_14d_min"'],['brace',': '],['num','-52'],['brace',',\n'],
+  ['key','    "social_surface_ratio"'],['brace',': '],['num','0.71'],['brace',',\n'],
+  ['key','    "presence_fragmentation"'],['brace',': '],['num','+2.3'],['brace',',\n'],
+  ['key','    "habit_continuity"'],['brace',': '],['num','0.68'],['brace','\n  },\n'],
+  ['key','  "intervention_eligible"'],['brace',': '],['bool','true'],['brace','\n}\n'],
+];
+
+function typeTerminal() {
+  const out = document.getElementById('term-out');
+  let i = 0;
+  function next() {
+    if (i >= tokens.length) { document.getElementById('cur').style.display='none'; return; }
+    const [type, text] = tokens[i++];
+    const s = document.createElement('span');
+    s.className = 'tc-' + type;
+    s.textContent = text;
+    out.appendChild(s);
+    setTimeout(next, i < 12 ? 90 : 42);
+  }
+  setTimeout(next, 200);
+}
+
+// ── SCENE SEQUENCER ─────────────────────────────────────────
+function runDemo() {
+  // ── STAGE 1: Current baseline ──
+  at(0,    () => showScene('sc1'));
+  at(3000, () => hideScene('sc1'));
+
+  // S1: Terminal  3–15s
+  at(3200, () => showScene('s1'));
+  at(3600, typeTerminal);
+  at(6200, () => show('a1'));
+  at(7800, () => show('a2'));
+  at(9400, () => show('a3'));
+  at(14800,() => hideScene('s1'));
+
+  // S2: Cascade  15–26s
+  at(15600,() => showScene('s2'));
+  at(16100,() => document.getElementById('cl1').classList.add('lit'));
+  at(16800,() => document.getElementById('ca1').classList.add('show'));
+  at(17500,() => document.getElementById('cl2').classList.add('lit'));
+  at(18200,() => document.getElementById('ca2').classList.add('show'));
+  at(18900,() => document.getElementById('cl3').classList.add('lit'));
+  at(19600,() => document.getElementById('ca3').classList.add('show'));
+  at(20300,() => document.getElementById('cl4').classList.add('lit'));
+  at(21000,() => document.getElementById('ca4').classList.add('show'));
+  at(21700,() => document.getElementById('cl5').classList.add('lit'));
+  at(25600,() => hideScene('s2'));
+
+  // S3: Delivery → chat  26–42s
+  at(26400,() => showScene('s3'));
+  at(26900,() => show('lc3-1'));
+  at(27400,() => show('lc3-2'));
+  at(28200,() => document.getElementById('pn3').classList.add('in'));
+  at(29400,() => show('lc3-3'));
+  at(30600,() => show('chat-layer'));
+  at(31100,() => show('m1'));
+  at(32400,() => show('m2'));
+  at(33000,() => { show('ty1'); show('lc3-4'); });
+  at(35200,() => { document.getElementById('ty1').classList.remove('show'); show('m3'); });
+  at(36600,() => show('m4'));
+  at(37200,() => show('ty2'));
+  at(39400,() => { document.getElementById('ty2').classList.remove('show'); show('m5'); });
+  at(41800,() => hideScene('s3'));
+
+  // ── STAGE 2: Features become agent skills ──
+  at(42600,() => showScene('sc2'));
+  at(45600,() => hideScene('sc2'));
+
+  // S4: Agent skills  46–64s
+  at(45800,() => showScene('s4'));
+  at(46300,() => show('f1'));
+  at(46750,() => show('f2'));
+  at(47200,() => show('f3'));
+  at(47650,() => show('f4'));
+  at(48100,() => show('f5'));
+  at(48550,() => show('f6'));
+  at(49300,() => show('lp'));
+  at(50000,() => show('acore'));
+  at(50900,() => show('rp'));
+  at(51700,() => show('sk1'));
+  at(52250,() => show('sk2'));
+  at(52800,() => show('sk3'));
+  at(53350,() => show('sk4'));
+  at(53900,() => show('sk5'));
+  at(56200,() => show('skcap'));
+  at(63800,() => hideScene('s4'));
+
+  // ── STAGE 3: The governed decision lifecycle ──
+  at(64600,() => showScene('sc3'));
+  at(67600,() => hideScene('sc3'));
+
+  // S5: Governed loop  68–87s
+  at(67800,() => showScene('s5'));
+  at(68300,() => { show('gv-left'); show('gv-right'); });
+  at(69000,() => document.getElementById('n1').classList.add('lit'));
+  at(70200,() => show('ge1'));
+  at(71000,() => document.getElementById('n2').classList.add('lit'));
+  at(72200,() => show('ge2'));
+  at(73000,() => document.getElementById('n3').classList.add('lit'));
+  at(74200,() => show('ge3'));
+  at(75000,() => document.getElementById('n4').classList.add('lit'));
+  at(76200,() => show('ge4'));
+  at(77000,() => document.getElementById('n5').classList.add('lit'));
+  at(78800,() => show('gv-center'));
+  at(86600,() => hideScene('s5'));
+
+  // End card  87s →
+  at(87400,() => showScene('s-end'));
+  at(87900,() => show('ge-auth'));
+  at(88500,() => show('ge-arrows'));
+  at(89100,() => show('ge-proof'));
+  at(90300,() => show('ge-msg'));
+  at(91300,() => show('ge-sub'));
+}
+
+document.fonts.ready.then(() => setTimeout(runDemo, 200));
+</script>
+</body>
+</html>
