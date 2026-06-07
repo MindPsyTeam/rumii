@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 690" role="img"
+     aria-label="Animated diagram: rumii passive-signal cascade — smartphone sensor signals through behavioural features, cluster classification and phenotype to a governed intervention at 09:14, beside a signal-evidence table and the five-edge governed lifecycle where authority flows down and proof flows back up.">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .ink  { fill:#f3f4f8; }
+    .dim  { fill:#b4b8cb; }
+    .acc  { fill:#d7e24a; }
+    .bad  { fill:#fb7185; }
+    .good { fill:#34d399; }
+    .h    { font-size:11px; letter-spacing:.14em; fill:#b4b8cb; }
+    .t11  { font-size:11px; }
+    .t10  { font-size:10px; }
+    .t12  { font-size:12.5px; }
+    .rule { stroke:#3a3f59; stroke-width:1; }
+    .spine{ stroke:#3a3f59; stroke-width:1.25; }
+
+    .f { opacity:0; animation: fade .5s ease-out forwards; }
+    @keyframes fade { to { opacity:1; } }
+
+    .draw { animation: draw .4s linear forwards; }
+    @keyframes draw { to { stroke-dashoffset:0; } }
+
+    .march { stroke:#d7e24a; stroke-width:1.5; stroke-dasharray:2 10; opacity:0;
+             animation: marchin .5s ease-out 7.4s forwards, march 1.6s linear 7.4s infinite; }
+    @keyframes march   { from { stroke-dashoffset:0; } to { stroke-dashoffset:-48; } }
+    @keyframes marchin { to { opacity:.75; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; }
+      .f { opacity:1; }
+      .draw { stroke-dashoffset:0 !important; }
+      .march { opacity:.75; }
+    }
+  </style>
+
+  <rect width="1120" height="690" fill="#13141c"/>
+
+  <!-- header -->
+  <g class="f" style="animation-delay:.2s">
+    <text x="40" y="46" class="ink" font-size="16">rumii — passive signal &#8594; governed intervention</text>
+    <text x="40" y="66" class="dim t11">Sarah &#183; 19 &#183; IBD trial cohort 03 &#183; week 3 &#183; attachment phenotype: anxious-preoccupied — demo data</text>
+  </g>
+
+  <!-- ============ left: signal evidence ============ -->
+  <g class="f" style="animation-delay:.5s">
+    <text x="40" y="112" class="h">02 &#8212; SIGNAL EVIDENCE&#160;&#160;(vs 14-day rolling baseline)</text>
+    <line x1="40" y1="126" x2="392" y2="126" class="rule"/>
+  </g>
+
+  <g class="f" style="animation-delay:.8s">
+    <text x="40"  y="158" class="dim t11">sleep deficit</text>
+    <text x="392" y="158" text-anchor="end" class="bad t12">&#9660; &#8722;52 min</text>
+  </g>
+  <g class="f" style="animation-delay:1.0s">
+    <text x="40"  y="196" class="dim t11">sleep fragmentation</text>
+    <text x="392" y="196" text-anchor="end" class="bad t12">&#9650; +2.3&#963;</text>
+  </g>
+  <g class="f" style="animation-delay:1.2s">
+    <text x="40"  y="234" class="dim t11">sociability ratio</text>
+    <text x="392" y="234" text-anchor="end" class="ink t12">0.71</text>
+  </g>
+  <g class="f" style="animation-delay:1.4s">
+    <text x="40"  y="272" class="dim t11">habit continuity</text>
+    <text x="392" y="272" text-anchor="end" class="ink t12">0.68</text>
+  </g>
+  <g class="f" style="animation-delay:1.6s">
+    <text x="40"  y="310" class="dim t11">in-person presence</text>
+    <text x="392" y="310" text-anchor="end" class="ink t12">fragmented</text>
+  </g>
+  <g class="f" style="animation-delay:1.8s">
+    <text x="40"  y="348" class="dim t11">active clusters</text>
+    <text x="392" y="348" text-anchor="end" class="ink t12">A &#183; C &#183; F</text>
+    <text x="392" y="364" text-anchor="end" class="dim t10">sleep disruption &#183; social surface shift &#183; in-person fragmentation</text>
+    <line x1="40" y1="380" x2="392" y2="380" class="rule"/>
+  </g>
+
+  <!-- ============ centre: the cascade ============ -->
+  <g class="f" style="animation-delay:.5s">
+    <text x="470" y="112" class="h">01&#8594;03 &#8212; CASCADE</text>
+  </g>
+
+  <!-- node 1 -->
+  <g class="f" style="animation-delay:.8s">
+    <circle cx="470" cy="156" r="3.5" fill="#b4b8cb"/>
+    <text x="486" y="160" class="ink t12">passive sensor signals</text>
+    <text x="486" y="176" class="dim t10">smartphone &#183; battery-preserving</text>
+  </g>
+  <line x1="470" y1="166" x2="470" y2="234" class="spine draw" stroke-dasharray="68" stroke-dashoffset="68" style="animation-delay:1.2s"/>
+
+  <!-- node 2 -->
+  <g class="f" style="animation-delay:1.6s">
+    <circle cx="470" cy="244" r="3.5" fill="#b4b8cb"/>
+    <text x="486" y="248" class="ink t12">derived behavioural features</text>
+    <text x="486" y="264" class="dim t10">deviation vs 14-day rolling baseline</text>
+  </g>
+  <line x1="470" y1="254" x2="470" y2="322" class="spine draw" stroke-dasharray="68" stroke-dashoffset="68" style="animation-delay:2.0s"/>
+
+  <!-- node 3 -->
+  <g class="f" style="animation-delay:2.4s">
+    <circle cx="470" cy="332" r="3.5" fill="#b4b8cb"/>
+    <text x="486" y="336" class="ink t12">pattern cluster classification</text>
+    <text x="486" y="352" class="dim t10">clusters A&#8211;F deviation-scored &#183; active: A C F</text>
+  </g>
+  <line x1="470" y1="342" x2="470" y2="410" class="spine draw" stroke-dasharray="68" stroke-dashoffset="68" style="animation-delay:2.8s"/>
+
+  <!-- node 4 -->
+  <g class="f" style="animation-delay:3.2s">
+    <circle cx="470" cy="420" r="3.5" fill="#b4b8cb"/>
+    <text x="486" y="424" class="ink t12">behavioural phenotype</text>
+    <text x="486" y="440" class="dim t10">anxious-preoccupied &#183; stability 0.42 &#183; risk tier <tspan class="acc">AMBER</tspan></text>
+  </g>
+  <line x1="470" y1="430" x2="470" y2="498" class="spine draw" stroke-dasharray="68" stroke-dashoffset="68" style="animation-delay:3.6s"/>
+
+  <!-- node 5 -->
+  <g class="f" style="animation-delay:4.0s">
+    <circle cx="470" cy="508" r="3.5" fill="#b4b8cb"/>
+    <text x="486" y="512" class="ink t12">clinical reasoning agent</text>
+    <text x="486" y="528" class="dim t10">state&#8211;action&#8211;response &#183; readiness stage 3 &#183; <tspan class="good">optimal</tspan></text>
+    <text x="486" y="544" class="dim t10">skills: sleep &#183; sociability &#183; presence &#183; habits &#183; phenotype &#183; readiness</text>
+  </g>
+  <line x1="470" y1="518" x2="470" y2="586" class="spine draw" stroke-dasharray="68" stroke-dashoffset="68" style="animation-delay:4.4s"/>
+
+  <!-- node 6: intervention (the earned accent) -->
+  <g class="f" style="animation-delay:4.8s">
+    <circle cx="470" cy="596" r="4" fill="#d7e24a"/>
+    <text x="486" y="600" class="acc t12">intervention delivered &#183; 09:14</text>
+    <text x="486" y="616" class="dim t10">&#8220;Hey Sarah — how are you settling in?&#8221;</text>
+    <text x="486" y="630" class="dim t10">warm &#183; low friction &#183; invitation, not demand</text>
+  </g>
+
+  <!-- ============ right: governed lifecycle ============ -->
+  <g class="f" style="animation-delay:5.2s">
+    <text x="800" y="112" class="h">05 &#8212; GOVERNED LIFECYCLE</text>
+    <text x="800"  y="142" class="dim t10">authority &#8595;</text>
+    <text x="1085" y="142" text-anchor="end" class="dim t10">proof &#8593;</text>
+  </g>
+
+  <!-- authority rail: draws downward -->
+  <line x1="800" y1="152" x2="800" y2="556" class="spine draw" stroke-dasharray="404" stroke-dashoffset="404" style="animation-delay:5.2s; animation-duration:.8s"/>
+  <path d="M 796 552 L 804 552 L 800 562 Z" fill="#b4b8cb" class="f" style="animation-delay:6.0s"/>
+
+  <!-- edges -->
+  <g class="f" style="animation-delay:5.4s">
+    <text x="942" y="186" text-anchor="middle" class="ink t11">signal detected</text>
+  </g>
+  <g class="f" style="animation-delay:5.7s">
+    <text x="942" y="276" text-anchor="middle" class="ink t11">policy evaluated</text>
+  </g>
+  <g class="f" style="animation-delay:6.0s">
+    <text x="942" y="366" text-anchor="middle" class="ink t11">intervention delivered</text>
+  </g>
+  <g class="f" style="animation-delay:6.3s">
+    <text x="942" y="456" text-anchor="middle" class="ink t11">outcome observed</text>
+  </g>
+  <g class="f" style="animation-delay:6.6s">
+    <text x="942" y="546" text-anchor="middle" class="good t11">governance preserved &#10003;</text>
+  </g>
+
+  <!-- proof rail: draws upward, then a slow accent march keeps flowing up -->
+  <line x1="1085" y1="556" x2="1085" y2="152" class="spine draw" stroke-dasharray="404" stroke-dashoffset="404" style="animation-delay:6.8s; animation-duration:.8s"/>
+  <path d="M 1081 158 L 1089 158 L 1085 148 Z" fill="#b4b8cb" class="f" style="animation-delay:7.4s"/>
+  <line x1="1085" y1="556" x2="1085" y2="152" class="march"/>
+
+  <g class="f" style="animation-delay:7.2s">
+    <text x="942" y="600" text-anchor="middle" class="dim t10" font-style="italic">authority flows down &#183; proof flows back up</text>
+  </g>
+
+  <!-- footer -->
+  <g class="f" style="animation-delay:7.6s">
+    <text x="40" y="668" class="dim t10">source: rumii platform demo &#183; mindpsyteam.github.io/rumii — all values are demo cohort data</text>
+  </g>
+</svg>
