@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rumii — Evidence Audit</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%; overflow:hidden;
+  background:#030308;
+  font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+body { display:flex; flex-direction:column; }
+
+/* ── TOP BAR ───────────────────────────────────────────── */
+header {
+  height:48px; flex-shrink:0;
+  display:flex; align-items:center; gap:14px; padding:0 22px;
+  border-bottom:0.5px solid rgba(255,255,255,0.08);
+  background:#06060c;
+}
+.hdr-title { font-size:13px; font-weight:600; color:rgba(255,255,255,0.88); letter-spacing:0.02em; }
+.hdr-sub { font-size:11px; color:rgba(255,255,255,0.45); }
+.hdr-mark {
+  margin-left:auto;
+  font-size:13px; font-weight:700; color:rgba(255,255,255,0.3); letter-spacing:0.14em;
+}
+.hdr-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,194,51,0.6); }
+
+/* ── SPLIT ─────────────────────────────────────────────── */
+.split { flex:1; display:flex; min-height:0; }
+.pane { position:relative; overflow:hidden; min-width:240px; background:#030308; }
+#pane-journey { flex-basis:50%; flex-shrink:0; }
+#pane-arch { flex:1; }
+
+.divider {
+  width:7px; flex-shrink:0; cursor:col-resize; position:relative;
+  background:#06060c;
+  border-left:0.5px solid rgba(255,255,255,0.07);
+  border-right:0.5px solid rgba(255,255,255,0.07);
+}
+.divider::after {
+  content:''; position:absolute; top:50%; left:50%;
+  width:1.5px; height:34px; transform:translate(-50%,-50%);
+  background:rgba(255,194,51,0.35); border-radius:2px;
+}
+.divider:hover::after, body.dragging .divider::after { background:rgba(255,194,51,0.7); }
+body.dragging { cursor:col-resize; user-select:none; }
+body.dragging iframe, body.dragging video { pointer-events:none; }
+
+/* ── PANE HEADERS ──────────────────────────────────────── */
+.pane-hdr {
+  position:absolute; top:12px; left:14px; z-index:10;
+  display:flex; align-items:center; gap:9px;
+  background:rgba(5,5,10,0.72); backdrop-filter:blur(10px);
+  border:0.5px solid rgba(255,255,255,0.1); border-radius:20px;
+  padding:5px 13px 5px 7px;
+}
+.ph-num {
+  width:20px; height:20px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:600;
+}
+.ph-journey .ph-num { background:rgba(255,194,51,0.14); border:0.5px solid rgba(255,194,51,0.4); color:#FFC233; }
+.ph-arch .ph-num    { background:rgba(126,184,255,0.12); border:0.5px solid rgba(126,184,255,0.4); color:#7eb8ff; }
+.ph-title { font-size:11px; font-weight:600; color:rgba(255,255,255,0.85); }
+.ph-sub { font-size:10px; color:rgba(255,255,255,0.5); }
+
+.replay {
+  position:absolute; top:12px; right:14px; z-index:10;
+  display:flex; align-items:center; gap:6px;
+  background:rgba(5,5,10,0.72); backdrop-filter:blur(10px);
+  border:0.5px solid rgba(255,255,255,0.12); border-radius:20px;
+  padding:5px 13px; cursor:pointer;
+  font-size:10.5px; font-weight:500; color:rgba(255,255,255,0.65);
+  transition:color 0.2s ease, border-color 0.2s ease;
+}
+.replay:hover { color:#FFC233; border-color:rgba(255,194,51,0.4); }
+
+/* ── CONTENT ───────────────────────────────────────────── */
+video { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#000; }
+
+.stage { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.stage iframe { width:1280px; height:720px; border:0; flex-shrink:0; transform-origin:center center; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-title">Evidence audit</div>
+  <div class="hdr-dot"></div>
+  <div class="hdr-sub">The user journey, alongside the architecture that governs it</div>
+  <div class="hdr-mark">rumii</div>
+</header>
+
+<div class="split">
+
+  <div class="pane" id="pane-journey">
+    <div class="pane-hdr ph-journey">
+      <div class="ph-num">01</div>
+      <div>
+        <span class="ph-title">User journey</span>
+        <span class="ph-sub">&nbsp;· the experience, with its reasoning</span>
+      </div>
+    </div>
+    <video src="rumii-platform-demo.webm" autoplay loop muted playsinline controls></video>
+  </div>
+
+  <div class="divider" id="divider"></div>
+
+  <div class="pane" id="pane-arch">
+    <div class="pane-hdr ph-arch">
+      <div class="ph-num">02</div>
+      <div>
+        <span class="ph-title">Architecture</span>
+        <span class="ph-sub">&nbsp;· baseline → agent skills → governed lifecycle</span>
+      </div>
+    </div>
+    <div class="replay" id="replay">⟳&nbsp; Replay</div>
+    <div class="stage" id="stage">
+      <iframe id="demo" src="rumii-demo.html" scrolling="no"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Fit the fixed 1280×720 demo into its pane ──────────────
+const pane = document.getElementById('pane-arch');
+const frame = document.getElementById('demo');
+function fit() {
+  const r = pane.getBoundingClientRect();
+  const s = Math.min(r.width / 1280, r.height / 720);
+  frame.style.transform = 'scale(' + s + ')';
+}
+new ResizeObserver(fit).observe(pane);
+window.addEventListener('resize', fit);
+fit();
+
+// ── Replay the demo timeline ───────────────────────────────
+document.getElementById('replay').addEventListener('click', () => {
+  frame.contentWindow.location.reload();
+});
+
+// ── Draggable divider ──────────────────────────────────────
+const journey = document.getElementById('pane-journey');
+const divider = document.getElementById('divider');
+divider.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  document.body.classList.add('dragging');
+  const move = (ev) => {
+    const total = document.querySelector('.split').getBoundingClientRect();
+    let pct = ((ev.clientX - total.left) / total.width) * 100;
+    pct = Math.max(20, Math.min(80, pct));
+    journey.style.flexBasis = pct + '%';
+  };
+  const up = () => {
+    document.body.classList.remove('dragging');
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('pointerup', up);
+  };
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', up);
+});
+</script>
+</body>
+</html>
